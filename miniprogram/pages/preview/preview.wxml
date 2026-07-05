@@ -1,0 +1,11 @@
+<view class="container">
+  <image class="preview-img" src="{{previewUrl}}" mode="aspectFit" wx:if="{{previewUrl}}" />
+  <view class="watermark-hint">预览图含水印，下载原图需消耗代币</view>
+  <view class="actions">
+    <button class="weui-btn weui-btn_primary" bindtap="download" loading="{{downloading}}">
+      下载原图（{{price}} 代币）
+    </button>
+    <button class="weui-btn weui-btn_default" bindtap="retry">不满意，重新处理</button>
+    <button class="weui-btn weui-btn_default" bindtap="goHome">返回首页</button>
+  </view>
+</view>
