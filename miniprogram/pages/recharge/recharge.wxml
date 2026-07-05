@@ -1,0 +1,15 @@
+<view class="container">
+  <view class="balance-bar">当前代币：<text class="balance-num">{{tokens}}</text></view>
+  <view class="package-list">
+    <view class="package-card" wx:for="{{packages}}" wx:key="_id">
+      <view class="package-name">{{item.name}}</view>
+      <view class="package-tokens">{{item.tokens}} 代币
+        <text class="package-bonus" wx:if="{{item.bonus}}">+ 赠送 {{item.bonus}}</text>
+      </view>
+      <view class="package-price">¥{{item.priceInYuan}}</view>
+      <button class="weui-btn weui-btn_primary weui-btn_mini" bindtap="buy" data-id="{{item._id}}">
+        立即购买
+      </button>
+    </view>
+  </view>
+</view>
