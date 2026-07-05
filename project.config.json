@@ -11,7 +11,7 @@
     "compileHotReLoad": false,
     "useMultiFrameRuntime": true
   },
-  "appid": "YOUR_APPID_HERE",
+  "appid": "wxf11fbab4f82d1e3a",
   "projectname": "ai-photo-beautify",
   "libVersion": "3.3.4"
 }
