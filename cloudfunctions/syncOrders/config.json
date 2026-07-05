@@ -1,0 +1,10 @@
+{
+  "permissions": { "openapi": [] },
+  "triggers": [
+    {
+      "name": "syncOrdersTimer",
+      "type": "timer",
+      "config": "0 */5 * * * * *"
+    }
+  ]
+}
