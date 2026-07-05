@@ -1,4 +1,5 @@
 <view class="container">
+  <view class="bg-gradient"></view>
   <view class="hero">
     <view class="hero-title">AI 图片美化</view>
     <view class="hero-sub">一键智能修图 · 让每张照片更出彩</view>
