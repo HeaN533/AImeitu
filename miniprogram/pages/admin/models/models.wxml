@@ -1,14 +1,63 @@
 <view class="container">
   <view class="admin-title">模型配置</view>
+
   <view class="category-section" wx:for="{{categories}}" wx:key="key">
-    <view class="cat-header">{{item.label}}</view>
-    <view class="model-item" wx:for="{{item.models}}" wx:key="_id">
+    <view class="cat-header">{{item.label}}（{{item.models.length}}）</view>
+
+    <view class="model-item" wx:for="{{item.models}}" wx:key="_id" data-id="{{item._id}}" bindtap="editModel">
       <view class="model-info">
         <view class="model-name">{{item.name}}</view>
-        <view class="model-url">{{item.api_url}}</view>
+        <view class="model-row">
+          <text class="model-label">API:</text>
+          <text class="model-value">{{item.api_url || '未设置'}}</text>
+        </view>
+        <view class="model-row">
+          <text class="model-label">密钥:</text>
+          <text class="model-value">{{item.api_key ? '***' + item.api_key.slice(-4) : '未设置'}}</text>
+        </view>
       </view>
-      <switch checked="{{item.is_active}}" data-id="{{item._id}}" data-active="{{item.is_active}}" bindchange="toggleModel" />
+      <switch checked="{{item.is_active}}" data-id="{{item._id}}" data-active="{{item.is_active}}" catchtap="toggleModel" />
     </view>
-    <button class="weui-btn weui-btn_mini weui-btn_default" data-category="{{item.key}}" bindtap="addModel">+ 添加模型</button>
+
+    <button class="weui-btn weui-btn_mini weui-btn_default" data-category="{{item.key}}" bindtap="showAddForm">+ 添加模型</button>
+  </view>
+</view>
+
+<!-- 编辑/添加弹窗 -->
+<view class="modal-mask" wx:if="{{showForm}}" catchtap="hideForm"></view>
+<view class="modal-panel" wx:if="{{showForm}}">
+  <view class="modal-title">{{editingId ? '编辑模型' : '添加模型'}}</view>
+
+  <view class="form-item">
+    <view class="form-label">分类</view>
+    <picker mode="selector" range="{{categoryOptions}}" range-key="label" value="{{formCategoryIdx}}" bindchange="onCategoryChange">
+      <view class="picker-val">{{categoryOptions[formCategoryIdx].label}}</view>
+    </picker>
+  </view>
+
+  <view class="form-item">
+    <view class="form-label">模型名称</view>
+    <input class="form-input" placeholder="如：Replicate GFPGAN" value="{{formData.name}}" bindinput="onFieldChange" data-field="name" />
+  </view>
+
+  <view class="form-item">
+    <view class="form-label">API 地址</view>
+    <input class="form-input" placeholder="https://api.replicate.com/v1/..." value="{{formData.api_url}}" bindinput="onFieldChange" data-field="api_url" />
+  </view>
+
+  <view class="form-item">
+    <view class="form-label">API 密钥</view>
+    <input class="form-input" placeholder="r8_xxxx" value="{{formData.api_key}}" bindinput="onFieldChange" data-field="api_key" password="{{!showKey}}" />
+    <switch class="show-key-switch" checked="{{showKey}}" bindchange="toggleShowKey" /> <text class="show-key-label">显示</text>
+  </view>
+
+  <view class="form-item">
+    <view class="form-label">扩展参数 (JSON)</view>
+    <textarea class="form-textarea" placeholder='{"version": "xxx"}' value="{{formConfigText}}" bindinput="onConfigChange" auto-height maxlength="500" />
+  </view>
+
+  <view class="form-actions">
+    <button class="weui-btn weui-btn_default" bindtap="hideForm">取消</button>
+    <button class="weui-btn weui-btn_primary" bindtap="saveModel" loading="{{saving}}">保存</button>
   </view>
 </view>

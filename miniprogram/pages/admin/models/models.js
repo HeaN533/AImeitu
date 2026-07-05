@@ -2,23 +2,37 @@ const app = getApp();
 const { CATEGORIES, CATEGORY_LABELS } = require('../../../utils/constants');
 
 Page({
-  data: { categories: [] },
+  data: {
+    categories: [],
+    showForm: false,
+    saving: false,
+    editingId: '',
+    formCategoryIdx: 0,
+    formData: { name: '', api_url: '', api_key: '', config: {} },
+    formConfigText: '{}',
+    showKey: false,
+    categoryOptions: [],
+  },
 
   onShow() {
     if (!app.globalData.isAdmin) { wx.navigateBack(); return; }
+    this.setData({
+      categoryOptions: CATEGORIES.map(k => ({ key: k, label: CATEGORY_LABELS[k] })),
+    });
     this.loadModels();
   },
 
   async loadModels() {
     const db = wx.cloud.database();
     const res = await db.collection('model_configs').get();
-    const categories = CATEGORIES.filter(c => c !== 'auto').map(key => ({
+    const categories = CATEGORIES.map(key => ({
       key, label: CATEGORY_LABELS[key],
       models: res.data.filter(m => m.category === key),
     }));
     this.setData({ categories });
   },
 
+  // ---- toggle ----
   async toggleModel(e) {
     const { id, active } = e.currentTarget.dataset;
     const db = wx.cloud.database();
@@ -28,23 +42,87 @@ Page({
     this.loadModels();
   },
 
-  addModel(e) {
+  // ---- add ----
+  showAddForm(e) {
     const category = e.currentTarget.dataset.category;
-    wx.showModal({
-      title: '添加模型',
-      editable: true,
-      placeholderText: '输入模型名称',
-      success: async (res) => {
-        if (!res.confirm || !res.content) return;
-        const db = wx.cloud.database();
-        await db.collection('model_configs').add({
-          data: {
-            name: res.content, category, api_url: '', api_key: '',
-            is_active: false, config: {}, updated_at: new Date(),
-          }
-        });
-        this.loadModels();
-      },
+    const idx = this.data.categoryOptions.findIndex(c => c.key === category);
+    this.setData({
+      showForm: true, editingId: '',
+      formCategoryIdx: idx >= 0 ? idx : 0,
+      formData: { name: '', api_url: '', api_key: '', config: {} },
+      formConfigText: '{}',
     });
+  },
+
+  // ---- edit ----
+  editModel(e) {
+    const id = e.currentTarget.dataset.id;
+    const db = wx.cloud.database();
+    db.collection('model_configs').doc(id).get().then(res => {
+      const m = res.data;
+      const idx = this.data.categoryOptions.findIndex(c => c.key === m.category);
+      this.setData({
+        showForm: true, editingId: id,
+        formCategoryIdx: idx >= 0 ? idx : 0,
+        formData: { name: m.name, api_url: m.api_url || '', api_key: m.api_key || '', config: m.config || {} },
+        formConfigText: JSON.stringify(m.config || {}, null, 2),
+      });
+    });
+  },
+
+  hideForm() {
+    this.setData({ showForm: false });
+  },
+
+  // ---- form handlers ----
+  onCategoryChange(e) {
+    this.setData({ formCategoryIdx: parseInt(e.detail.value) });
+  },
+
+  onFieldChange(e) {
+    const field = e.currentTarget.dataset.field;
+    const value = e.detail.value;
+    this.setData({ ['formData.' + field]: value });
+  },
+
+  onConfigChange(e) {
+    this.setData({ formConfigText: e.detail.value });
+  },
+
+  toggleShowKey() {
+    this.setData({ showKey: !this.data.showKey });
+  },
+
+  // ---- save ----
+  async saveModel() {
+    const { editingId, formData, formConfigText, formCategoryIdx, categoryOptions } = this.data;
+    let config = {};
+    try {
+      config = JSON.parse(formConfigText);
+    } catch (e) {
+      wx.showToast({ title: '扩展参数 JSON 格式错误', icon: 'none' });
+      return;
+    }
+
+    this.setData({ saving: true });
+    const db = wx.cloud.database();
+    const category = categoryOptions[formCategoryIdx].key;
+    const payload = { ...formData, config, category, updated_at: new Date() };
+
+    try {
+      if (editingId) {
+        await db.collection('model_configs').doc(editingId).update({ data: payload });
+      } else {
+        payload.is_active = false;
+        await db.collection('model_configs').add({ data: payload });
+      }
+      wx.showToast({ title: editingId ? '已更新' : '已添加', icon: 'success' });
+      this.setData({ showForm: false });
+      this.loadModels();
+    } catch (err) {
+      wx.showToast({ title: '保存失败', icon: 'none' });
+    } finally {
+      this.setData({ saving: false });
+    }
   },
 });
