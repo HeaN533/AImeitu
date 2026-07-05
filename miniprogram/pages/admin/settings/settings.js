@@ -31,6 +31,12 @@ Page({
   switchTab(e) { this.setData({ activeTab: e.currentTarget.dataset.tab }); },
 
   // ---- pricing ----
+  onPricingInput(e) {
+    const { index, field } = e.currentTarget.dataset;
+    const value = parseInt(e.detail.value) || 0;
+    this.setData({ ['pricingList[' + index + '].' + field]: value });
+  },
+
   async updatePricing(e) {
     const { id, field } = e.currentTarget.dataset;
     const value = parseInt(e.detail.value) || 0;

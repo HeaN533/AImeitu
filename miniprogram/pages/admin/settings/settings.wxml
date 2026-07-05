@@ -1,17 +1,18 @@
 <view class="container">
   <view class="admin-title">配置管理</view>
   <view class="tab-bar">
-    <view class="tab {{activeTab==='price'?'active':''}}" bindtap="switchTab" data-tab="price">定价</view>
+    <view class="tab {{activeTab==='price'?'active':''}}" bindtap="switchTab" data-tab="price">消耗定价</view>
     <view class="tab {{activeTab==='packages'?'active':''}}" bindtap="switchTab" data-tab="packages">套餐</view>
     <view class="tab {{activeTab==='subscribe'?'active':''}}" bindtap="switchTab" data-tab="subscribe">订阅</view>
     <view class="tab {{activeTab==='invite'?'active':''}}" bindtap="switchTab" data-tab="invite">邀请</view>
   </view>
 
-  <!-- 定价 Tab -->
+  <!-- 消耗定价 Tab -->
   <view wx:if="{{activeTab==='price'}}" class="tab-content">
-    <view class="setting-item" wx:for="{{pricingList}}" wx:key="_id">
+    <view class="tab-hint">设置每种美化的单次消耗代币数</view>
+    <view class="setting-item" wx:for="{{pricingList}}" wx:key="_id" wx:for-index="idx">
       <text class="setting-label">{{item.label}}</text>
-      <input class="setting-input" type="number" value="{{item.tokens}}" data-id="{{item._id}}" data-field="tokens" bindblur="updatePricing" />
+      <input class="setting-input" type="number" value="{{item.tokens}}" data-id="{{item._id}}" data-index="{{idx}}" data-field="tokens" bindinput="onPricingInput" bindblur="updatePricing" />
       <text class="setting-unit">代币/次</text>
     </view>
   </view>
