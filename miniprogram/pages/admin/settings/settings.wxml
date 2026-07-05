@@ -1,0 +1,43 @@
+<view class="container">
+  <view class="admin-title">配置管理</view>
+  <view class="tab-bar">
+    <view class="tab {{activeTab==='price'?'active':''}}" bindtap="switchTab" data-tab="price">定价</view>
+    <view class="tab {{activeTab==='packages'?'active':''}}" bindtap="switchTab" data-tab="packages">套餐</view>
+    <view class="tab {{activeTab==='subscribe'?'active':''}}" bindtap="switchTab" data-tab="subscribe">订阅</view>
+    <view class="tab {{activeTab==='invite'?'active':''}}" bindtap="switchTab" data-tab="invite">邀请</view>
+  </view>
+
+  <!-- 定价 Tab -->
+  <view wx:if="{{activeTab==='price'}}" class="tab-content">
+    <view class="setting-item" wx:for="{{pricingList}}" wx:key="_id">
+      <text class="setting-label">{{item.label}}</text>
+      <input class="setting-input" type="number" value="{{item.tokens}}" data-id="{{item._id}}" data-field="tokens" bindblur="updatePricing" />
+      <text class="setting-unit">代币/次</text>
+    </view>
+  </view>
+
+  <!-- 套餐 Tab -->
+  <view wx:if="{{activeTab==='packages'}}" class="tab-content">
+    <view class="setting-item" wx:for="{{packages}}" wx:key="_id">
+      <view class="pkg-info"><text>{{item.name}} - ¥{{item.priceInYuan}} - {{item.tokens}}代币</text>
+      <switch checked="{{item.is_active}}" data-id="{{item._id}}" data-field="is_active" bindchange="updatePackage" /></view>
+    </view>
+    <button class="weui-btn weui-btn_mini weui-btn_default" bindtap="addPackage">+ 添加套餐</button>
+  </view>
+
+  <!-- 订阅 Tab -->
+  <view wx:if="{{activeTab==='subscribe'}}" class="tab-content">
+    <view class="setting-item"><text class="setting-label">月费(分)</text>
+      <input class="setting-input" type="number" value="{{subConfig.price}}" data-field="price" bindblur="updateSub" /></view>
+    <view class="setting-item"><text class="setting-label">每日赠送</text>
+      <input class="setting-input" type="number" value="{{subConfig.daily_tokens}}" data-field="daily_tokens" bindblur="updateSub" /></view>
+  </view>
+
+  <!-- 邀请 Tab -->
+  <view wx:if="{{activeTab==='invite'}}" class="tab-content">
+    <view class="setting-item"><text class="setting-label">邀请人奖励</text>
+      <input class="setting-input" type="number" value="{{inviteConfig.inviter_reward}}" data-field="inviter_reward" bindblur="updateInvite" /></view>
+    <view class="setting-item"><text class="setting-label">被邀请人奖励</text>
+      <input class="setting-input" type="number" value="{{inviteConfig.invitee_reward}}" data-field="invitee_reward" bindblur="updateInvite" /></view>
+  </view>
+</view>

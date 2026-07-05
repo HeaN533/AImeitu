@@ -1,0 +1,14 @@
+<view class="container">
+  <view class="admin-title">模型配置</view>
+  <view class="category-section" wx:for="{{categories}}" wx:key="key">
+    <view class="cat-header">{{item.label}}</view>
+    <view class="model-item" wx:for="{{item.models}}" wx:key="_id">
+      <view class="model-info">
+        <view class="model-name">{{item.name}}</view>
+        <view class="model-url">{{item.api_url}}</view>
+      </view>
+      <switch checked="{{item.is_active}}" data-id="{{item._id}}" data-active="{{item.is_active}}" bindchange="toggleModel" />
+    </view>
+    <button class="weui-btn weui-btn_mini weui-btn_default" data-category="{{item.key}}" bindtap="addModel">+ 添加模型</button>
+  </view>
+</view>

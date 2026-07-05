@@ -1,0 +1,6 @@
+.category-section { margin-bottom: 32rpx; }
+.cat-header { font-size: 28rpx; font-weight: bold; color: #333; margin-bottom: 12rpx; }
+.model-item { display: flex; align-items: center; justify-content: space-between; background: #fff; border-radius: 8rpx; padding: 20rpx; margin-bottom: 8rpx; }
+.model-info { flex: 1; }
+.model-name { font-size: 26rpx; color: #333; }
+.model-url { font-size: 22rpx; color: #999; }

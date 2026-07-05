@@ -1,0 +1,7 @@
+.admin-title { font-size: 36rpx; font-weight: bold; margin-bottom: 24rpx; }
+.stat-grid { display: flex; flex-wrap: wrap; gap: 16rpx; margin-bottom: 32rpx; }
+.stat-card { width: calc(50% - 8rpx); background: #fff; border-radius: 12rpx; padding: 32rpx; text-align: center; }
+.stat-num { font-size: 48rpx; font-weight: bold; color: var(--primary-color); }
+.stat-label { font-size: 24rpx; color: #999; margin-top: 8rpx; }
+.nav-grid { display: flex; flex-direction: column; gap: 16rpx; }
+.nav-btn { background: #fff; border-radius: 12rpx; font-size: 28rpx; }

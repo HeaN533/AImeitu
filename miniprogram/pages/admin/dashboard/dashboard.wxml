@@ -1,0 +1,14 @@
+<view class="container">
+  <view class="admin-title">数据面板</view>
+  <view class="stat-grid">
+    <view class="stat-card"><view class="stat-num">{{todayProcess}}</view><view class="stat-label">今日处理量</view></view>
+    <view class="stat-card"><view class="stat-num">{{todayRevenue}}</view><view class="stat-label">今日收入(元)</view></view>
+    <view class="stat-card"><view class="stat-num">{{todayActive}}</view><view class="stat-label">今日活跃用户</view></view>
+    <view class="stat-card"><view class="stat-num">{{totalOrders}}</view><view class="stat-label">总充值笔数</view></view>
+  </view>
+  <view class="nav-grid">
+    <button class="nav-btn" bindtap="goModels">模型配置</button>
+    <button class="nav-btn" bindtap="goActivities">活动管理</button>
+    <button class="nav-btn" bindtap="goSettings">定价与套餐</button>
+  </view>
+</view>

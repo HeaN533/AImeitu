@@ -1,0 +1,12 @@
+<view class="container">
+  <view class="admin-title">活动管理</view>
+  <view class="activity-card" wx:for="{{list}}" wx:key="_id">
+    <view class="act-name">{{item.name}}</view>
+    <view class="act-detail">奖励 {{item.reward_tokens}} 代币 | {{item.startLabel}} ~ {{item.endLabel}}</view>
+    <view class="act-actions">
+      <switch checked="{{item.is_active}}" data-id="{{item._id}}" data-active="{{item.is_active}}" bindchange="toggle" />
+      <button class="weui-btn weui-btn_mini weui-btn_warn" data-id="{{item._id}}" bindtap="deleteAct">删除</button>
+    </view>
+  </view>
+  <button class="weui-btn weui-btn_primary" bindtap="createActivity">+ 创建活动</button>
+</view>
