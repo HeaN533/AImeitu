@@ -1,9 +1,9 @@
 .hero {
-  padding: 48rpx 0 36rpx;
+  padding: 40rpx 0 32rpx;
   text-align: center;
 }
 .hero-title {
-  font-size: 48rpx;
+  font-size: 44rpx;
   font-weight: 800;
   color: var(--text);
   letter-spacing: 2rpx;
@@ -11,22 +11,22 @@
 .hero-sub {
   font-size: 26rpx;
   color: var(--text-secondary);
-  margin: 12rpx 0 28rpx;
+  margin: 8rpx 0 24rpx;
 }
 
 .category-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 20rpx;
+  width: 100%;
 }
 
 .c-card {
   width: calc(50% - 10rpx);
   border-radius: var(--radius);
-  padding: 36rpx 24rpx 28rpx;
+  padding: 40rpx 16rpx 32rpx;
   text-align: center;
-  position: relative;
-  overflow: hidden;
+  box-sizing: border-box;
 }
 .c-beautify { background: linear-gradient(160deg, #fff5f7 0%, #fff 100%); }
 .c-card:nth-child(2) { background: linear-gradient(160deg, #f0f4ff 0%, #fff 100%); }
@@ -42,10 +42,10 @@
   align-items: center;
   justify-content: center;
 }
-.c-beautify .c-icon-wrap { background: #fff0f3; }
-.c-card:nth-child(2) .c-icon-wrap { background: #edf2ff; }
-.c-card:nth-child(3) .c-icon-wrap { background: #f5edff; }
-.c-card:nth-child(4) .c-icon-wrap { background: #fff4e0; }
+.c-beautify .c-icon-wrap { background: #ffe8ec; }
+.c-card:nth-child(2) .c-icon-wrap { background: #e4ecff; }
+.c-card:nth-child(3) .c-icon-wrap { background: #f0e4ff; }
+.c-card:nth-child(4) .c-icon-wrap { background: #fff0d0; }
 
 .c-icon { font-size: 52rpx; }
 .c-name {

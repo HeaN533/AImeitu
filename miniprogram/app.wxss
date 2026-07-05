@@ -21,6 +21,7 @@ page {
 .container {
   min-height: 100vh;
   padding: 24rpx;
+  box-sizing: border-box;
 }
 
 /* card base */
@@ -30,6 +31,7 @@ page {
   padding: 28rpx;
   margin-bottom: 20rpx;
   box-shadow: var(--shadow);
+  box-sizing: border-box;
 }
 
 /* empty state */
@@ -45,3 +47,8 @@ page {
 
 /* divider */
 .divider { height: 1rpx; background: var(--divider); margin: 0 -28rpx; }
+
+/* global reset */
+view, text, image, button, input, scroll-view {
+  box-sizing: border-box;
+}
