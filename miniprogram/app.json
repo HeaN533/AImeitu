@@ -1,0 +1,22 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/process/process",
+    "pages/preview/preview",
+    "pages/history/history",
+    "pages/profile/profile",
+    "pages/recharge/recharge",
+    "pages/admin/dashboard/dashboard",
+    "pages/admin/models/models",
+    "pages/admin/activities/activities",
+    "pages/admin/settings/settings"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "AI 图片美化",
+    "navigationBarTextStyle": "black"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}
