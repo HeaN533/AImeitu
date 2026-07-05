@@ -1,0 +1,17 @@
+<view class="picker">
+  <view class="category-tabs">
+    <scroll-view scroll-x class="tab-scroll">
+      <view class="tab {{activeCategory === item.key ? 'active' : ''}}"
+        wx:for="{{categories}}" wx:key="key"
+        data-key="{{item.key}}" bindtap="switchCategory">{{item.label}}</view>
+    </scroll-view>
+  </view>
+  <view class="subtype-grid">
+    <view class="subtype-card {{selectedSubType === item.key ? 'selected' : ''}}"
+      wx:for="{{currentSubTypes}}" wx:key="key"
+      data-key="{{item.key}}" bindtap="selectSubType">
+      <view class="subtype-name">{{item.label}}</view>
+      <view class="subtype-price">{{currentPrice}} 代币</view>
+    </view>
+  </view>
+</view>

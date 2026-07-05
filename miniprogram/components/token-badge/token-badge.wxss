@@ -1,0 +1,5 @@
+.token-badge { display: flex; align-items: center; gap: 16rpx; }
+.token-item { display: flex; align-items: center; background: #fff; padding: 8rpx 20rpx; border-radius: 32rpx; }
+.token-label { font-size: 22rpx; color: #999; margin-right: 8rpx; }
+.token-value { font-size: 28rpx; font-weight: bold; color: var(--primary-color); }
+.token-label.activity, .token-value.activity { color: #ff9500; }
