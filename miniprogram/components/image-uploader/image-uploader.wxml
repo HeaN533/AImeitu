@@ -1,17 +1,17 @@
 <view class="uploader">
-  <view class="upload-area" wx:if="{{!imagePath}}" bindtap="chooseImage">
-    <view class="upload-icon">+</view>
-    <view class="upload-text">点击上传图片</view>
-    <view class="upload-hint">支持 jpg/png/heic/webp，最大 10MB</view>
+  <view class="up-zone" wx:if="{{!imagePath}}" bindtap="chooseImage">
+    <view class="up-plus">+</view>
+    <view class="up-text">点击上传图片</view>
+    <view class="up-hint">jpg / png / heic / webp · 最大 10MB</view>
   </view>
-  <view class="preview-area" wx:else>
-    <image class="preview-img" src="{{imagePath}}" mode="aspectFit" />
-    <view class="preview-actions">
-      <button class="weui-btn weui-btn_mini weui-btn_default" bindtap="reChoose">重新选择</button>
-      <button class="weui-btn weui-btn_mini weui-btn_primary" bindtap="confirmUpload" loading="{{uploading}}">
+  <view class="up-preview" wx:else>
+    <image class="up-img" src="{{imagePath}}" mode="aspectFit" />
+    <view class="up-btns">
+      <view class="up-repick" bindtap="reChoose">重新选择</view>
+      <view class="up-confirm" bindtap="confirmUpload">
         {{uploading ? '上传中...' : '确认上传'}}
-      </button>
+      </view>
     </view>
   </view>
-  <view class="error-msg" wx:if="{{error}}">{{error}}</view>
+  <view class="up-err" wx:if="{{error}}">{{error}}</view>
 </view>

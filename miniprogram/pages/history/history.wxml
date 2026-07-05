@@ -1,16 +1,17 @@
 <view class="container">
-  <view class="empty" wx:if="{{list.length === 0 && !loading}}">暂无处理记录</view>
-  <view class="history-item" wx:for="{{list}}" wx:key="_id">
-    <image class="thumb" src="{{item.thumbUrl}}" mode="aspectFill" />
-    <view class="info">
-      <view class="info-row">{{item.label}} · {{item.subLabel}}</view>
-      <view class="info-row date">{{item.created_at}}</view>
-      <view class="info-row status {{item.is_downloaded ? 'paid' : 'unpaid'}}">
-        {{item.is_downloaded ? '已付费 · 可再次下载' : '未付费 · 点击下载'}}
+  <view class="empty-state" wx:if="{{list.length === 0 && !loading}}">
+    <text class="icon">📷</text>
+    <text class="text">暂无处理记录</text>
+  </view>
+  <view class="h-item" wx:for="{{list}}" wx:key="_id">
+    <image class="h-thumb" src="{{item.thumbUrl}}" mode="aspectFill" />
+    <view class="h-info">
+      <view class="h-title">{{item.label}} · {{item.subLabel}}</view>
+      <view class="h-date">{{item.created_at}}</view>
+      <view class="h-status {{item.is_downloaded ? 'paid' : 'free'}}">
+        {{item.is_downloaded ? '已付费' : '待下载'}}
       </view>
     </view>
-    <button class="weui-btn weui-btn_mini weui-btn_primary" bindtap="download" data-id="{{item._id}}">
-      {{item.is_downloaded ? '重新下载' : '下载'}}
-    </button>
+    <button class="h-btn" bindtap="download" data-id="{{item._id}}">下载</button>
   </view>
 </view>

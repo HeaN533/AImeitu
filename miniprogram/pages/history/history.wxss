@@ -1,9 +1,31 @@
-.empty { text-align: center; color: #999; padding: 100rpx 0; font-size: 28rpx; }
-.history-item { display: flex; align-items: center; background: #fff; border-radius: 12rpx; padding: 20rpx; margin-bottom: 16rpx; gap: 20rpx; }
-.thumb { width: 120rpx; height: 120rpx; border-radius: 8rpx; flex-shrink: 0; }
-.info { flex: 1; min-width: 0; }
-.info-row { font-size: 24rpx; color: #666; margin-bottom: 4rpx; }
-.info-row.date { color: #999; font-size: 22rpx; }
-.info-row.status { font-size: 22rpx; }
-.status.paid { color: var(--primary-color); }
-.status.unpaid { color: #ff9500; }
+.h-item {
+  display: flex;
+  align-items: center;
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+  gap: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+}
+.h-thumb {
+  width: 140rpx; height: 140rpx;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  background: #f0f0f0;
+}
+.h-info { flex: 1; min-width: 0; }
+.h-title { font-size: 28rpx; font-weight: 600; color: var(--text); margin-bottom: 6rpx; }
+.h-date { font-size: 22rpx; color: var(--text-hint); margin-bottom: 4rpx; }
+.h-status { font-size: 22rpx; font-weight: 500; }
+.h-status.paid { color: var(--primary); }
+.h-status.free { color: var(--warn); }
+.h-btn {
+  background: var(--primary);
+  color: #fff;
+  border-radius: 36rpx;
+  font-size: 24rpx;
+  padding: 12rpx 28rpx;
+  border: none;
+  flex-shrink: 0;
+}

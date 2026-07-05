@@ -1,10 +1,10 @@
-<view class="token-badge">
-  <view class="token-item">
-    <text class="token-label">永久代币</text>
-    <text class="token-value">{{tokens}}</text>
+<view class="badge-wrap">
+  <view class="b-item">
+    <text class="b-num">{{tokens}}</text>
+    <text class="b-tag">永久</text>
   </view>
-  <view class="token-item" wx:if="{{activityTokens > 0}}">
-    <text class="token-label activity">限时代币</text>
-    <text class="token-value activity">{{activityTokens}}</text>
+  <view class="b-item" wx:if="{{activityTokens > 0}}">
+    <text class="b-num act">{{activityTokens}}</text>
+    <text class="b-tag act">限时</text>
   </view>
 </view>

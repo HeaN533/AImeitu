@@ -1,8 +1,17 @@
 <view class="container">
-  <view class="step-title">步骤一：上传图片</view>
+  <view class="step {{fileID ? 'done' : 'active'}}">
+    <view class="step-num">1</view>
+    <view class="step-label">上传图片</view>
+  </view>
   <image-uploader bind:upload="onImageUploaded" />
-  <view class="step-title" wx:if="{{fileID}}">步骤二：选择美化效果</view>
+
+  <view class="step {{subType ? 'done' : (fileID ? 'active' : '')}}" wx:if="{{fileID}}">
+    <view class="step-num">2</view>
+    <view class="step-label">选择效果</view>
+  </view>
   <effect-picker wx:if="{{fileID}}" bind:select="onEffectSelect" />
-  <button class="weui-btn weui-btn_primary start-btn" wx:if="{{fileID && subType}}"
-    bindtap="startProcess" loading="{{processing}}">{{processing ? '处理中...' : '开始美化'}}</button>
+
+  <button class="go-btn" wx:if="{{fileID && subType}}" bindtap="startProcess" loading="{{processing}}">
+    {{processing ? 'AI 处理中...' : '✨ 开始美化'}}
+  </button>
 </view>

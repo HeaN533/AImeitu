@@ -1,5 +1,6 @@
-.token-badge { display: flex; align-items: center; gap: 16rpx; }
-.token-item { display: flex; align-items: center; background: #fff; padding: 8rpx 20rpx; border-radius: 32rpx; }
-.token-label { font-size: 22rpx; color: #999; margin-right: 8rpx; }
-.token-value { font-size: 28rpx; font-weight: bold; color: var(--primary-color); }
-.token-label.activity, .token-value.activity { color: #ff9500; }
+.badge-wrap { display: flex; justify-content: center; gap: 24rpx; }
+.b-item { text-align: center; }
+.b-num { font-size: 36rpx; font-weight: 700; color: var(--primary); }
+.b-num.act { color: var(--warn); }
+.b-tag { font-size: 20rpx; color: var(--text-hint); display: block; }
+.b-tag.act { color: var(--warn); }

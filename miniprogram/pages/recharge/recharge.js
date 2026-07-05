@@ -2,7 +2,7 @@ const app = getApp();
 const { callFunction } = require('../../utils/cloud');
 
 Page({
-  data: { tokens: 0, packages: [] },
+  data: { tokens: 0, packages: [], selected: '' },
 
   onShow: async function () {
     const user = await app.getUserInfo();
@@ -17,8 +17,14 @@ Page({
     });
   },
 
-  async buy(e) {
-    const packageId = e.currentTarget.dataset.id;
+  selectPackage(e) {
+    const id = e.currentTarget.dataset.id;
+    this.setData({ selected: id === this.data.selected ? '' : id });
+  },
+
+  async buy() {
+    if (!this.data.selected) return;
+    const packageId = this.data.selected;
     wx.showLoading({ title: '创建订单...' });
     try {
       const res = await callFunction('createOrder', { packageId });
