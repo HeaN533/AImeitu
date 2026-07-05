@@ -18,11 +18,16 @@
 
   <!-- 套餐 Tab -->
   <view wx:if="{{activeTab==='packages'}}" class="tab-content">
-    <view class="setting-item" wx:for="{{packages}}" wx:key="_id">
-      <view class="pkg-info"><text>{{item.name}} - ¥{{item.priceInYuan}} - {{item.tokens}}代币</text>
-      <switch checked="{{item.is_active}}" data-id="{{item._id}}" data-field="is_active" bindchange="updatePackage" /></view>
+    <view class="setting-item" wx:for="{{packages}}" wx:key="_id" data-id="{{item._id}}" bindtap="editPackage">
+      <view class="pkg-info">
+        <view class="pkg-left">
+          <view class="pkg-name">{{item.name}}</view>
+          <view class="pkg-detail">{{item.tokens}}代币<span wx:if="{{item.bonus}}"> + 赠{{item.bonus}}</span> · ¥{{item.priceInYuan}}</view>
+        </view>
+        <switch checked="{{item.is_active}}" data-id="{{item._id}}" catchtap="updatePackage" />
+      </view>
     </view>
-    <button class="weui-btn weui-btn_mini weui-btn_default" bindtap="addPackage">+ 添加套餐</button>
+    <button class="weui-btn weui-btn_mini weui-btn_default" bindtap="showAddPackage">+ 添加套餐</button>
   </view>
 
   <!-- 订阅 Tab -->
@@ -39,5 +44,37 @@
       <input class="setting-input" type="number" value="{{inviteConfig.inviter_reward}}" data-field="inviter_reward" bindblur="updateInvite" /></view>
     <view class="setting-item"><text class="setting-label">被邀请人奖励</text>
       <input class="setting-input" type="number" value="{{inviteConfig.invitee_reward}}" data-field="invitee_reward" bindblur="updateInvite" /></view>
+  </view>
+</view>
+
+<!-- 套餐编辑弹窗 -->
+<view class="modal-mask" wx:if="{{showForm}}" catchtap="hideForm"></view>
+<view class="modal-panel" wx:if="{{showForm}}">
+  <view class="modal-title">{{editingId ? '编辑套餐' : '添加套餐'}}</view>
+
+  <view class="form-item">
+    <view class="form-label">套餐名称</view>
+    <input class="form-input" placeholder="如：100代币包" value="{{formData.name}}" bindinput="onFieldChange" data-field="name" />
+  </view>
+
+  <view class="form-item">
+    <view class="form-label">价格（分）</view>
+    <input class="form-input" type="number" placeholder="1999" value="{{formData.price}}" bindinput="onNumChange" data-field="price" />
+    <view class="form-hint">¥{{priceInYuan}}</view>
+  </view>
+
+  <view class="form-item">
+    <view class="form-label">代币数</view>
+    <input class="form-input" type="number" placeholder="100" value="{{formData.tokens}}" bindinput="onNumChange" data-field="tokens" />
+  </view>
+
+  <view class="form-item">
+    <view class="form-label">赠送代币</view>
+    <input class="form-input" type="number" placeholder="0" value="{{formData.bonus}}" bindinput="onNumChange" data-field="bonus" />
+  </view>
+
+  <view class="form-actions">
+    <button class="weui-btn weui-btn_default" bindtap="hideForm">取消</button>
+    <button class="weui-btn weui-btn_primary" bindtap="savePackage" loading="{{saving}}">保存</button>
   </view>
 </view>

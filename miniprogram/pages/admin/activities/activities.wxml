@@ -1,12 +1,55 @@
 <view class="container">
   <view class="admin-title">活动管理</view>
-  <view class="activity-card" wx:for="{{list}}" wx:key="_id">
+
+  <view class="activity-card" wx:for="{{list}}" wx:key="_id" data-id="{{item._id}}" bindtap="editActivity">
     <view class="act-name">{{item.name}}</view>
-    <view class="act-detail">奖励 {{item.reward_tokens}} 代币 | {{item.startLabel}} ~ {{item.endLabel}}</view>
+    <view class="act-desc" wx:if="{{item.description}}">{{item.description}}</view>
+    <view class="act-detail">🎁 {{item.reward_tokens}} 代币 | 📅 {{item.startLabel}} ~ {{item.endLabel}}</view>
     <view class="act-actions">
-      <switch checked="{{item.is_active}}" data-id="{{item._id}}" data-active="{{item.is_active}}" bindchange="toggle" />
-      <button class="weui-btn weui-btn_mini weui-btn_warn" data-id="{{item._id}}" bindtap="deleteAct">删除</button>
+      <switch checked="{{item.is_active}}" data-id="{{item._id}}" data-active="{{item.is_active}}" catchtap="toggle" />
+      <button class="weui-btn weui-btn_mini weui-btn_warn" data-id="{{item._id}}" catchtap="deleteAct">删除</button>
     </view>
   </view>
-  <button class="weui-btn weui-btn_primary" bindtap="createActivity">+ 创建活动</button>
+
+  <button class="weui-btn weui-btn_primary" bindtap="showAddForm">+ 创建活动</button>
+</view>
+
+<!-- 编辑/添加弹窗 -->
+<view class="modal-mask" wx:if="{{showForm}}" catchtap="hideForm"></view>
+<view class="modal-panel" wx:if="{{showForm}}">
+  <view class="modal-title">{{editingId ? '编辑活动' : '创建活动'}}</view>
+
+  <view class="form-item">
+    <view class="form-label">活动名称</view>
+    <input class="form-input" placeholder="如：新年限时福利" value="{{formData.name}}" bindinput="onFieldChange" data-field="name" />
+  </view>
+
+  <view class="form-item">
+    <view class="form-label">活动描述</view>
+    <input class="form-input" placeholder="简单描述活动规则" value="{{formData.description}}" bindinput="onFieldChange" data-field="description" />
+  </view>
+
+  <view class="form-item">
+    <view class="form-label">奖励代币数</view>
+    <input class="form-input" type="number" placeholder="10" value="{{formData.reward_tokens}}" bindinput="onNumChange" data-field="reward_tokens" />
+  </view>
+
+  <view class="form-item">
+    <view class="form-label">开始日期</view>
+    <picker mode="date" value="{{formData.start_time}}" start="2026-01-01" bindchange="onDateChange" data-field="start_time">
+      <view class="picker-val">{{formData.start_time || '点击选择'}}</view>
+    </picker>
+  </view>
+
+  <view class="form-item">
+    <view class="form-label">结束日期</view>
+    <picker mode="date" value="{{formData.end_time}}" start="2026-01-01" bindchange="onDateChange" data-field="end_time">
+      <view class="picker-val">{{formData.end_time || '点击选择'}}</view>
+    </picker>
+  </view>
+
+  <view class="form-actions">
+    <button class="weui-btn weui-btn_default" bindtap="hideForm">取消</button>
+    <button class="weui-btn weui-btn_primary" bindtap="saveActivity" loading="{{saving}}">保存</button>
+  </view>
 </view>

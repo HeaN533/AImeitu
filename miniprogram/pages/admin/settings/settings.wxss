@@ -6,4 +6,20 @@
 .setting-label { width: 200rpx; font-size: 26rpx; color: #333; }
 .setting-input { flex: 1; border: 1rpx solid #ddd; border-radius: 6rpx; padding: 8rpx 16rpx; font-size: 26rpx; }
 .setting-unit { font-size: 22rpx; color: #999; margin-left: 12rpx; }
+
 .pkg-info { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.pkg-name { font-size: 28rpx; font-weight: bold; color: #333; }
+.pkg-detail { font-size: 22rpx; color: #999; margin-top: 4rpx; }
+
+/* modal */
+.modal-mask { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; }
+.modal-panel { position: fixed; left: 5%; right: 5%; top: 15%; background: #fff; border-radius: 16rpx; z-index: 101; padding: 32rpx; }
+.modal-title { font-size: 34rpx; font-weight: bold; color: #333; margin-bottom: 28rpx; text-align: center; }
+
+.form-item { margin-bottom: 24rpx; }
+.form-label { font-size: 26rpx; color: #333; margin-bottom: 8rpx; }
+.form-input { border: 1rpx solid #ddd; border-radius: 8rpx; padding: 12rpx 16rpx; font-size: 26rpx; width: 100%; box-sizing: border-box; }
+.form-hint { font-size: 22rpx; color: var(--primary-color); margin-top: 4rpx; }
+
+.form-actions { display: flex; gap: 20rpx; margin-top: 32rpx; }
+.form-actions button { flex: 1; }

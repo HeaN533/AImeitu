@@ -1,4 +1,18 @@
 .activity-card { background: #fff; border-radius: 12rpx; padding: 24rpx; margin-bottom: 16rpx; }
-.act-name { font-size: 28rpx; font-weight: bold; color: #333; margin-bottom: 8rpx; }
+.act-name { font-size: 28rpx; font-weight: bold; color: #333; margin-bottom: 4rpx; }
+.act-desc { font-size: 22rpx; color: #999; margin-bottom: 4rpx; }
 .act-detail { font-size: 22rpx; color: #666; margin-bottom: 12rpx; }
 .act-actions { display: flex; justify-content: space-between; align-items: center; }
+
+/* modal */
+.modal-mask { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; }
+.modal-panel { position: fixed; left: 5%; right: 5%; top: 8%; bottom: 8%; background: #fff; border-radius: 16rpx; z-index: 101; padding: 32rpx; overflow-y: auto; }
+.modal-title { font-size: 34rpx; font-weight: bold; color: #333; margin-bottom: 28rpx; text-align: center; }
+
+.form-item { margin-bottom: 24rpx; }
+.form-label { font-size: 26rpx; color: #333; margin-bottom: 8rpx; }
+.form-input { border: 1rpx solid #ddd; border-radius: 8rpx; padding: 12rpx 16rpx; font-size: 26rpx; width: 100%; box-sizing: border-box; }
+.picker-val { border: 1rpx solid #ddd; border-radius: 8rpx; padding: 12rpx 16rpx; font-size: 26rpx; color: #333; }
+
+.form-actions { display: flex; gap: 20rpx; margin-top: 32rpx; }
+.form-actions button { flex: 1; }
