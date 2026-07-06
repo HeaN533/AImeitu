@@ -8,7 +8,7 @@ Page({
     saving: false,
     editingId: '',
     formCategoryIdx: 0,
-    formData: { name: '', api_url: '', api_key: '', config: {} },
+    formData: { name: '', api_url: '', api_key: '', api_secret: '', config: {} },
     formConfigText: '{}',
     showKey: false,
     categoryOptions: [],
@@ -49,7 +49,7 @@ Page({
     this.setData({
       showForm: true, editingId: '',
       formCategoryIdx: idx >= 0 ? idx : 0,
-      formData: { name: '', api_url: '', api_key: '', config: {} },
+      formData: { name: '', api_url: '', api_key: '', api_secret: '', config: {} },
       formConfigText: '{}',
     });
   },
@@ -64,7 +64,7 @@ Page({
       this.setData({
         showForm: true, editingId: id,
         formCategoryIdx: idx >= 0 ? idx : 0,
-        formData: { name: m.name, api_url: m.api_url || '', api_key: m.api_key || '', config: m.config || {} },
+        formData: { name: m.name, api_url: m.api_url || '', api_key: m.api_key || '', api_secret: m.api_secret || '', config: m.config || {} },
         formConfigText: JSON.stringify(m.config || {}, null, 2),
       });
     });

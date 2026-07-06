@@ -2,5 +2,5 @@
   "name": "processImage",
   "version": "1.0.0",
   "main": "index.js",
-  "dependencies": { "wx-server-sdk": "~3.0.0", "axios": "^1.6.0", "sharp": "^0.33.0" }
+  "dependencies": { "wx-server-sdk": "~3.0.0", "axios": "^1.6.0", "form-data": "^4.0.0" }
 }

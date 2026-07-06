@@ -2,12 +2,15 @@ async function callFunction(name, data = {}) {
   try {
     const res = await wx.cloud.callFunction({ name, data });
     if (res.result && res.result.err) {
-      wx.showToast({ title: res.result.err, icon: 'none' });
+      wx.showToast({ title: res.result.err, icon: 'none', duration: 3000 });
       throw new Error(res.result.err);
     }
     return res.result;
   } catch (err) {
-    wx.showToast({ title: '网络异常，请重试', icon: 'none' });
+    // 优先展示云函数返回的具体错误，避免统一吞成"网络异常"导致无法排查
+    const msg = (err && err.errMsg) || (err && err.message) || '网络异常';
+    console.error('callFunction [' + name + '] 失败:', err);
+    wx.showToast({ title: msg, icon: 'none', duration: 3000 });
     throw err;
   }
 }

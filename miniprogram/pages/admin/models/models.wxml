@@ -52,6 +52,12 @@
   </view>
 
   <view class="form-item">
+    <view class="form-label">API Secret</view>
+    <input class="form-input" placeholder="Face++ 等需要双密钥的服务填此项" value="{{formData.api_secret}}" bindinput="onFieldChange" data-field="api_secret" password="{{!showKey}}" />
+    <text class="show-key-label" style="margin-left: 8rpx;">{{showKey ? '可见' : '隐藏'}}</text>
+  </view>
+
+  <view class="form-item">
     <view class="form-label">扩展参数 (JSON)</view>
     <textarea class="form-textarea" placeholder='{"version": "xxx"}' value="{{formConfigText}}" bindinput="onConfigChange" auto-height maxlength="500" />
   </view>
