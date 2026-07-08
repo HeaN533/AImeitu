@@ -22,12 +22,19 @@ Page({
   async loadPrice(imageId) {
     const db = wx.cloud.database();
     const img = await db.collection('images').doc(imageId).get();
-    const price = DEFAULT_PRICES[img.data.process_type] || 2;
-    this.setData({
-      price,
-      category: img.data.process_type,
-      originalFileID: img.data.original_url
-    });
+    const category = img.data.process_type;
+    const originalFileID = img.data.original_url;
+
+    let price = DEFAULT_PRICES[category] || 2;
+    try {
+      const priceRes = await db.collection('pricing_config')
+        .where({ category }).get();
+      if (priceRes.data.length > 0) {
+        price = priceRes.data[0].tokens;
+      }
+    } catch (e) { /* fallback to DEFAULT_PRICES */ }
+
+    this.setData({ price, category, originalFileID });
   },
 
   async download() {
