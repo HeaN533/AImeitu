@@ -7,6 +7,7 @@ exports.main = async (event, context) => {
     'users', 'token_records', 'orders', 'images', 'model_configs',
     'activities', 'user_activity_tokens', 'token_packages',
     'pricing_config', 'subscribe_config', 'invite_config', 'invite_records',
+    'ad_config',
   ];
   const results = {};
 
@@ -58,6 +59,18 @@ exports.main = async (event, context) => {
       }
     });
     results['default_invite'] = 'inserted';
+  }
+
+  // 默认广告配置
+  const ac = await db.collection('ad_config').count();
+  if (ac.total === 0) {
+    await db.collection('ad_config').add({
+      data: {
+        daily_limit: 3, reward_tokens: 2,
+        is_active: true, updated_at: new Date(),
+      }
+    });
+    results['default_ad_config'] = 'inserted';
   }
 
   return results;
