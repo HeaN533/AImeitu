@@ -18,7 +18,11 @@ Component({
         sourceType: ['album', 'camera'],
         success: (res) => {
           const file = res.tempFiles[0];
-          const validation = validateImage({ name: file.tempFilePath, size: file.size });
+          const validation = validateImage({
+            name: file.tempFilePath,
+            size: file.size,
+            fileType: file.fileType || '',
+          });
           if (!validation.valid) {
             this.setData({ error: validation.error });
             return;
