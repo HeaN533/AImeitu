@@ -3,59 +3,84 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 const _ = db.command;
 
+async function fulfillOrder(order) {
+  await db.runTransaction(async transaction => {
+    const txOrderRes = await transaction.collection('orders').doc(order._id).get();
+    if (txOrderRes.data.status === 'completed') return;
+
+    if (txOrderRes.data.status !== 'paid') {
+      await transaction.collection('orders').doc(order._id).update({
+        data: { status: 'paid' }
+      });
+    }
+
+    await transaction.collection('users').where({ _openid: order.user_id }).update({
+      data: { tokens: _.inc(order.tokens) }
+    });
+
+    const userRes = await transaction.collection('users').where({ _openid: order.user_id }).get();
+    await transaction.collection('token_records').add({
+      data: {
+        user_id: order.user_id, type: 'purchase', token_type: 'permanent',
+        amount: order.tokens, balance_after: userRes.data[0].tokens,
+        related_order: order._id, created_at: new Date(), _openid: order.user_id,
+      }
+    });
+
+    await transaction.collection('orders').doc(order._id).update({
+      data: { status: 'completed' }
+    });
+  });
+}
+
 exports.main = async (event, context) => {
   const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000);
+  let fixed = 0;
+  let synced = 0;
 
-  // 查找超过 5 分钟的 pending 订单（不含今天的，避免与正常回调冲突）
-  const orderRes = await db.collection('orders')
+  // 1. 扫 pending 超时 → 查微信支付 → 补单
+  const pendingRes = await db.collection('orders')
     .where({ status: 'pending', created_at: _.lt(fiveMinAgo) })
     .limit(50).get();
+  synced += pendingRes.data.length;
 
-  if (orderRes.data.length === 0) return { synced: 0, fixed: 0 };
-
-  let fixed = 0;
-
-  for (const order of orderRes.data) {
+  for (const order of pendingRes.data) {
     try {
-      // 调用微信支付查询接口
       const payResult = await cloud.cloudPay.queryOrder({
         out_trade_no: order._id,
-        sub_mch_id: '', // 根据实际商户号配置
+        sub_mch_id: '',
       });
 
       if (payResult.returnCode === 'SUCCESS' && payResult.tradeState === 'SUCCESS') {
-        // 支付成功但未到账 → 补单
-        await db.collection('orders').doc(order._id).update({
-          data: { status: 'paid', wx_order_id: payResult.transactionId || '' }
-        });
-
-        await db.collection('users').where({ _openid: order.user_id }).update({
-          data: { tokens: _.inc(order.tokens) }
-        });
-
-        const userRes = await db.collection('users').where({ _openid: order.user_id }).get();
-        if (userRes.data.length > 0) {
-          await db.collection('token_records').add({
-            data: {
-              user_id: order.user_id, type: 'purchase', token_type: 'permanent',
-              amount: order.tokens, balance_after: userRes.data[0].tokens,
-              related_order: order._id, created_at: new Date(), _openid: order.user_id,
-            }
-          });
-        }
-
+        await fulfillOrder(order);
         fixed++;
       } else if (payResult.tradeState === 'NOTPAY' || payResult.tradeState === 'CLOSED') {
-        // 未支付或已关闭 → 取消订单
         await db.collection('orders').doc(order._id).update({
           data: { status: 'cancelled' }
         });
       }
     } catch (e) {
-      // 单笔查询失败不影响其他订单
-      console.error('syncOrders error for order', order._id, e.message);
+      console.error('syncOrders pending error for order', order._id, e.message);
     }
   }
 
-  return { synced: orderRes.data.length, fixed };
+  // 2. 扫 paid 但无流水 → 补发代币
+  const paidNoStream = await db.collection('orders')
+    .where({ status: 'paid' }).limit(50).get();
+  synced += paidNoStream.data.length;
+
+  for (const order of paidNoStream.data) {
+    try {
+      const streamRes = await db.collection('token_records')
+        .where({ related_order: order._id, type: 'purchase' }).count();
+      if (streamRes.total === 0) {
+        await fulfillOrder(order);
+        fixed++;
+      }
+    } catch (e) {
+      console.error('syncOrders paid-no-stream error for order', order._id, e.message);
+    }
+  }
+
+  return { synced, fixed };
 };
