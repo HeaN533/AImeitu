@@ -4,7 +4,7 @@ const { callFunction } = require('../../../utils/cloud');
 
 Page({
   data: {
-    activeTab: 'price', pricingList: [], packages: [], subConfig: {}, inviteConfig: {},
+    activeTab: 'price', pricingList: [], packages: [], subConfig: {}, inviteConfig: {}, adConfig: {},
     showForm: false, saving: false, editingId: '', formData: {},
   },
 
@@ -15,17 +15,19 @@ Page({
 
   async loadAll() {
     const db = wx.cloud.database();
-    const [pr, pk, sc, ic] = await Promise.all([
+    const [pr, pk, sc, ic, ac] = await Promise.all([
       db.collection('pricing_config').get(),
       db.collection('token_packages').orderBy('price', 'asc').get(),
       db.collection('subscribe_config').limit(1).get(),
       db.collection('invite_config').limit(1).get(),
+      db.collection('ad_config').limit(1).get(),
     ]);
     this.setData({
       pricingList: pr.data.map(p => ({ ...p, label: CATEGORY_LABELS[p.category] || p.category })),
       packages: pk.data.map(p => ({ ...p, priceInYuan: (p.price / 100).toFixed(2) })),
       subConfig: sc.data[0] || { price: 1999, daily_tokens: 5 },
       inviteConfig: ic.data[0] || { inviter_reward: 10, invitee_reward: 5 },
+      adConfig: ac.data[0] || { daily_limit: 3, reward_tokens: 2, is_active: true },
     });
   },
 
@@ -133,6 +135,25 @@ Page({
     const { field } = e.currentTarget.dataset;
     const value = parseInt(e.detail.value) || 0;
     await callFunction('adminAction', { action: 'update', collection: 'invite_config', docId: this.data.inviteConfig._id, data: { [field]: value } });
+    wx.showToast({ title: '已更新', icon: 'success' });
+  },
+
+  // ---- ad ----
+  async updateAd(e) {
+    const { field } = e.currentTarget.dataset;
+    const value = parseInt(e.detail.value) || 0;
+    await callFunction('adminAction', {
+      action: 'update', collection: 'ad_config',
+      docId: this.data.adConfig._id, data: { [field]: value }
+    });
+    wx.showToast({ title: '已更新', icon: 'success' });
+  },
+
+  async toggleAdActive(e) {
+    await callFunction('adminAction', {
+      action: 'update', collection: 'ad_config',
+      docId: this.data.adConfig._id, data: { is_active: e.detail.value }
+    });
     wx.showToast({ title: '已更新', icon: 'success' });
   },
 });

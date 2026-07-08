@@ -5,6 +5,7 @@
     <view class="tab {{activeTab==='packages'?'active':''}}" bindtap="switchTab" data-tab="packages">套餐</view>
     <view class="tab {{activeTab==='subscribe'?'active':''}}" bindtap="switchTab" data-tab="subscribe">订阅</view>
     <view class="tab {{activeTab==='invite'?'active':''}}" bindtap="switchTab" data-tab="invite">邀请</view>
+    <view class="tab {{activeTab==='ad'?'active':''}}" bindtap="switchTab" data-tab="ad">广告</view>
   </view>
 
   <!-- 消耗定价 Tab -->
@@ -47,6 +48,16 @@
       <input class="setting-input" type="number" value="{{inviteConfig.inviter_reward}}" data-field="inviter_reward" bindblur="updateInvite" /></view>
     <view class="setting-item"><text class="setting-label">被邀请人奖励</text>
       <input class="setting-input" type="number" value="{{inviteConfig.invitee_reward}}" data-field="invitee_reward" bindblur="updateInvite" /></view>
+  </view>
+
+  <!-- 广告 Tab -->
+  <view wx:if="{{activeTab==='ad'}}" class="tab-content">
+    <view class="setting-item"><text class="setting-label">每日可领次数</text>
+      <input class="setting-input" type="number" value="{{adConfig.daily_limit}}" data-field="daily_limit" bindblur="updateAd" /></view>
+    <view class="setting-item"><text class="setting-label">每次奖励代币</text>
+      <input class="setting-input" type="number" value="{{adConfig.reward_tokens}}" data-field="reward_tokens" bindblur="updateAd" /></view>
+    <view class="setting-item"><text class="setting-label">功能开关</text>
+      <switch checked="{{adConfig.is_active}}" bindchange="toggleAdActive" /></view>
   </view>
 </view>
 
