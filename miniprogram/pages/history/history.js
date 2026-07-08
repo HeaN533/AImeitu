@@ -54,4 +54,11 @@ Page({
       wx.hideLoading();
     }
   },
+
+  reprocess(e) {
+    const { category, fileid } = e.currentTarget.dataset;
+    wx.navigateTo({
+      url: '/pages/process/process?category=' + category + '&fileID=' + fileid
+    });
+  },
 });

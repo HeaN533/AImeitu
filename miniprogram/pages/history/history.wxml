@@ -12,6 +12,9 @@
         {{item.is_downloaded ? '已付费' : '待下载'}}
       </view>
     </view>
-    <button class="h-btn" bindtap="download" data-id="{{item._id}}">下载</button>
+    <view class="h-btns">
+      <button class="h-btn" bindtap="download" data-id="{{item._id}}">下载</button>
+      <button class="h-btn h-btn-reprocess" bindtap="reprocess" data-id="{{item._id}}" data-category="{{item.process_type}}" data-fileid="{{item.original_url}}">重新处理</button>
+    </view>
   </view>
 </view>

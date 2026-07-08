@@ -47,5 +47,9 @@ Component({
         this.setData({ uploading: false });
       }
     },
+
+    showExternal(fileID) {
+      this.setData({ imagePath: fileID, imageFile: { external: true }, error: '' });
+    },
   },
 });

@@ -5,6 +5,11 @@ Page({
 
   onLoad(options) {
     this.setData({ category: options.category || 'auto' });
+    if (options.fileID) {
+      this.setData({ fileID: options.fileID, tempPath: '' });
+      const uploader = this.selectComponent('#uploader');
+      if (uploader) uploader.showExternal(options.fileID);
+    }
   },
 
   onImageUploaded(e) {

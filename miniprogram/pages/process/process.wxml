@@ -3,7 +3,7 @@
     <view class="step-num">1</view>
     <view class="step-label">上传图片</view>
   </view>
-  <image-uploader bind:upload="onImageUploaded" />
+  <image-uploader id="uploader" bind:upload="onImageUploaded" />
 
   <view class="step {{subType ? 'done' : (fileID ? 'active' : '')}}" wx:if="{{fileID}}">
     <view class="step-num">2</view>
