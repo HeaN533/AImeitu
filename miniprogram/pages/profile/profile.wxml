@@ -32,9 +32,9 @@
     <view class="m-item" bindtap="claimActivity">
       <text class="m-icon">🎉</text><text class="m-text">领取活动奖励</text><text class="m-arrow">›</text>
     </view>
-    <view class="m-item" bindtap="shareInvite">
+    <button class="m-item m-share-btn" open-type="share">
       <text class="m-icon">💌</text><text class="m-text">邀请好友<text class="m-sub">双方各得奖励</text></text><text class="m-arrow">›</text>
-    </view>
+    </button>
     <view class="m-item" wx:if="{{isAdmin}}" bindtap="goAdmin">
       <text class="m-icon">⚙️</text><text class="m-text">管理后台</text><text class="m-arrow">›</text>
     </view>

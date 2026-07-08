@@ -56,10 +56,12 @@ Page({
     } catch (e) { /* toast already shown */ }
   },
 
-  shareInvite() {
-    wx.shareAppMessage({
+  onShareAppMessage() {
+    const app = getApp();
+    const fullId = (app.globalData.userInfo && app.globalData.userInfo._id) || '';
+    return {
       title: 'AI 图片美化 — 免费体验智能修图',
-      path: '/pages/index/index?inviter=' + this.data.userId,
-    });
+      path: '/pages/index/index?inviter=' + fullId,
+    };
   },
 });

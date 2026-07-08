@@ -75,3 +75,19 @@
 .rec-amount.in { color: var(--primary); }
 .rec-amount.out { color: var(--danger); }
 .rec-divider { height: 1rpx; background: var(--divider); }
+
+.m-share-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: inherit;
+  font-size: inherit;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.m-share-btn::after {
+  border: none;
+}
