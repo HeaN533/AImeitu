@@ -46,8 +46,24 @@ Page({
           wx.saveImageToPhotosAlbum({
             filePath: df.tempFilePath,
             success: () => { wx.hideLoading(); wx.showToast({ title: '已保存到相册' }); },
-            fail: () => { wx.hideLoading(); wx.showToast({ title: '保存失败', icon: 'none' }); },
+            fail: (err) => {
+              wx.hideLoading();
+              if (err.errMsg && err.errMsg.indexOf('auth deny') !== -1) {
+                wx.showModal({
+                  title: '需要相册权限',
+                  content: '请在设置中允许保存图片到相册',
+                  confirmText: '去设置',
+                  success: (m) => { if (m.confirm) wx.openSetting(); }
+                });
+              } else {
+                wx.showToast({ title: '保存失败', icon: 'none' });
+              }
+            },
           });
+        },
+        fail: () => {
+          wx.hideLoading();
+          wx.showToast({ title: '下载失败', icon: 'none' });
         },
       });
     } catch (e) {
