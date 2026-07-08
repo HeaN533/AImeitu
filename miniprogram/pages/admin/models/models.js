@@ -26,7 +26,7 @@ Page({
   async loadModels() {
     const db = wx.cloud.database();
     const res = await db.collection('model_configs').get();
-    const categories = CATEGORIES.map(key => ({
+    const categories = CATEGORIES.filter(c => c !== 'auto').map(key => ({
       key, label: CATEGORY_LABELS[key],
       models: res.data.filter(m => m.category === key),
     }));
@@ -85,6 +85,8 @@ Page({
         formData: { name: m.name, api_url: m.api_url || '', api_key: m.api_key || '', api_secret: m.api_secret || '', config: m.config || {} },
         formConfigText: JSON.stringify(m.config || {}, null, 2),
       });
+    }).catch(err => {
+      wx.showToast({ title: '加载失败', icon: 'none' });
     });
   },
 
