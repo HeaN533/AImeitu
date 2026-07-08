@@ -5,13 +5,22 @@ App({
     } else {
       wx.cloud.init({ env: 'YOUR_ENV_ID', traceUser: true });
     }
-    this.globalData = { userInfo: null, isAdmin: false };
+    this.globalData = { userInfo: null, isAdmin: false, inviterId: '' };
+    try {
+      const launchOptions = wx.getLaunchOptionsSync();
+      if (launchOptions && launchOptions.query && launchOptions.query.inviter) {
+        this.globalData.inviterId = launchOptions.query.inviter;
+      }
+    } catch (e) { /* ignore */ }
   },
 
   getUserInfo: async function () {
     if (this.globalData.userInfo) return this.globalData.userInfo;
     const db = wx.cloud.database();
-    const res = await wx.cloud.callFunction({ name: 'checkInvite', data: {} });
+    const res = await wx.cloud.callFunction({
+      name: 'checkInvite',
+      data: { inviter_id: this.globalData.inviterId || '' }
+    });
     const { data } = await db.collection('users')
       .where({ _openid: '{openid}' }).get();
     if (data.length === 0) {
