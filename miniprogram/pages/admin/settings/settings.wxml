@@ -37,6 +37,8 @@
       <input class="setting-input" type="number" value="{{subConfig.price}}" data-field="price" bindblur="updateSub" /></view>
     <view class="setting-item"><text class="setting-label">每日赠送</text>
       <input class="setting-input" type="number" value="{{subConfig.daily_tokens}}" data-field="daily_tokens" bindblur="updateSub" /></view>
+    <view class="setting-item"><text class="setting-label">订阅模板ID</text>
+      <input class="setting-input" value="{{subConfig.wx_template_id}}" data-field="wx_template_id" bindblur="updateSubStr" placeholder="微信订阅消息模板ID" /></view>
   </view>
 
   <!-- 邀请 Tab -->

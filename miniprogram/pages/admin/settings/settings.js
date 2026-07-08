@@ -118,6 +118,16 @@ Page({
     wx.showToast({ title: '已更新', icon: 'success' });
   },
 
+  async updateSubStr(e) {
+    const { field } = e.currentTarget.dataset;
+    const value = e.detail.value || '';
+    await callFunction('adminAction', {
+      action: 'update', collection: 'subscribe_config',
+      docId: this.data.subConfig._id, data: { [field]: value }
+    });
+    wx.showToast({ title: '已更新', icon: 'success' });
+  },
+
   // ---- invite ----
   async updateInvite(e) {
     const { field } = e.currentTarget.dataset;
