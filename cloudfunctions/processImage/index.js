@@ -4,8 +4,16 @@ const FormData = require('form-data');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 
-// 模型调度：获取当前分类启用的第一个模型
 async function getActiveModel(category) {
+  if (category === 'auto') {
+    const priorities = ['beautify', 'color', 'style'];
+    for (const cat of priorities) {
+      const res = await db.collection('model_configs')
+        .where({ category: cat, is_active: true }).limit(1).get();
+      if (res.data.length > 0) return res.data[0];
+    }
+    throw new Error('没有可用的模型，请联系管理员');
+  }
   const res = await db.collection('model_configs')
     .where({ category, is_active: true }).limit(1).get();
   if (res.data.length === 0) throw new Error('没有可用的模型，请联系管理员');
