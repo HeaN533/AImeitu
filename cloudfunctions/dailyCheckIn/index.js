@@ -3,6 +3,10 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 const _ = db.command;
 
+function todayBeijing() {
+  return new Date(Date.now() + 8 * 3600 * 1000).toISOString().slice(0, 10);
+}
+
 exports.main = async (event, context) => {
   const { OPENID } = cloud.getWXContext();
 
@@ -12,8 +16,10 @@ exports.main = async (event, context) => {
 
   if (!user.subscription || !user.subscription.is_active) return { err: '请先订阅后再领取' };
 
-  const today = new Date().toDateString();
-  const claimedDate = user.subscription.daily_claimed_at ? new Date(user.subscription.daily_claimed_at).toDateString() : null;
+  const today = todayBeijing();
+  const claimedDate = user.subscription.daily_claimed_at
+    ? new Date(new Date(user.subscription.daily_claimed_at).getTime() + 8 * 3600 * 1000).toISOString().slice(0, 10)
+    : null;
   if (claimedDate === today) return { err: '今日已领取，明天再来' };
 
   const cfgRes = await db.collection('subscribe_config').limit(1).get();
