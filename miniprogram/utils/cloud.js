@@ -27,4 +27,14 @@ async function getTempURL(fileID) {
   throw new Error('获取链接失败');
 }
 
-module.exports = { callFunction, uploadImage, getTempURL };
+async function getTempURLs(fileIDs) {
+  if (!fileIDs || fileIDs.length === 0) return {};
+  const res = await wx.cloud.getTempFileURL({ fileList: fileIDs });
+  const map = {};
+  for (const item of res.fileList) {
+    if (item.tempFileURL) map[item.fileID] = item.tempFileURL;
+  }
+  return map;
+}
+
+module.exports = { callFunction, uploadImage, getTempURL, getTempURLs };

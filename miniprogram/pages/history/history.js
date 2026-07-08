@@ -1,4 +1,4 @@
-const { getTempURL, callFunction } = require('../../utils/cloud');
+const { getTempURL, getTempURLs, callFunction } = require('../../utils/cloud');
 const { CATEGORY_LABELS, SUB_TYPES } = require('../../utils/constants');
 
 function findSubLabel(category, subType) {
@@ -17,20 +17,15 @@ Page({
       .where({ _openid: '{openid}' })
       .orderBy('created_at', 'desc').limit(50).get();
 
-    const list = [];
-    for (const img of res.data) {
-      let thumbUrl = '';
-      try {
-        thumbUrl = await getTempURL(img.preview_url);
-      } catch (e) { /* skip */ }
-      list.push({
-        ...img,
-        thumbUrl,
-        label: CATEGORY_LABELS[img.process_type] || img.process_type,
-        subLabel: findSubLabel(img.process_type, img.sub_type),
-        created_at: img.created_at ? new Date(img.created_at).toLocaleDateString() : '',
-      });
-    }
+    const fileIDs = res.data.map(img => img.preview_url).filter(Boolean);
+    const urlMap = await getTempURLs(fileIDs);
+    const list = res.data.map(img => ({
+      ...img,
+      thumbUrl: urlMap[img.preview_url] || '',
+      label: CATEGORY_LABELS[img.process_type] || img.process_type,
+      subLabel: findSubLabel(img.process_type, img.sub_type),
+      created_at: img.created_at ? new Date(img.created_at).toLocaleDateString() : '',
+    }));
     this.setData({ list, loading: false });
   },
 

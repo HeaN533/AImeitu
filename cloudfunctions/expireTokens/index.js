@@ -6,11 +6,18 @@ const _ = db.command;
 exports.main = async (event, context) => {
   const now = new Date();
 
-  // 1. 查找所有已过期的活动代币记录
-  const expiredRes = await db.collection('user_activity_tokens')
-    .where({ expires_at: _.lt(now), tokens: _.gt(0) }).get();
+  // 1. 分页查找所有已过期的活动代币记录
+  let allExpired = [];
+  let batch;
+  do {
+    batch = await db.collection('user_activity_tokens')
+      .where({ expires_at: _.lt(now), tokens: _.gt(0) })
+      .limit(100).get();
+    allExpired = allExpired.concat(batch.data);
+  } while (batch.data.length === 100);
 
-  if (expiredRes.data.length === 0) return { processed: 0, expiredTokens: 0 };
+  if (allExpired.length === 0) return { processed: 0, expiredTokens: 0 };
+  const expiredRes = { data: allExpired };
 
   // 2. 按用户汇总过期代币数
   const userTotals = {};
