@@ -1,5 +1,6 @@
 const app = getApp();
 const { CATEGORY_LABELS } = require('../../../utils/constants');
+const { callFunction } = require('../../../utils/cloud');
 
 Page({
   data: {
@@ -40,19 +41,15 @@ Page({
   async updatePricing(e) {
     const { id, field } = e.currentTarget.dataset;
     const value = parseInt(e.detail.value) || 0;
-    const db = wx.cloud.database();
-    await db.collection('pricing_config').doc(id).update({ data: { [field]: value, updated_at: new Date() } });
+    await callFunction('adminAction', { action: 'update', collection: 'pricing_config', docId: id, data: { [field]: value } });
     wx.showToast({ title: '已更新', icon: 'success' });
   },
 
   // ---- packages ----
   async updatePackage(e) {
-    const db = wx.cloud.database();
     const id = e.currentTarget.dataset.id;
     const item = this.data.packages.find(p => p._id === id);
-    await db.collection('token_packages').doc(id).update({
-      data: { is_active: !item.is_active }
-    });
+    await callFunction('adminAction', { action: 'update', collection: 'token_packages', docId: id, data: { is_active: !item.is_active } });
     this.loadAll();
   },
 
@@ -92,7 +89,6 @@ Page({
     if (!formData.name) { wx.showToast({ title: '请输入套餐名称', icon: 'none' }); return; }
 
     this.setData({ saving: true });
-    const db = wx.cloud.database();
     const payload = {
       name: formData.name, price: formData.price, tokens: formData.tokens,
       bonus: formData.bonus,
@@ -100,11 +96,9 @@ Page({
 
     try {
       if (editingId) {
-        await db.collection('token_packages').doc(editingId).update({ data: payload });
+        await callFunction('adminAction', { action: 'update', collection: 'token_packages', docId: editingId, data: payload });
       } else {
-        await db.collection('token_packages').add({
-          data: { ...payload, is_active: true, created_at: new Date() }
-        });
+        await callFunction('adminAction', { action: 'add', collection: 'token_packages', data: { ...payload, is_active: true, created_at: new Date() } });
       }
       wx.showToast({ title: editingId ? '已更新' : '已创建', icon: 'success' });
       this.setData({ showForm: false });
@@ -120,8 +114,7 @@ Page({
   async updateSub(e) {
     const { field } = e.currentTarget.dataset;
     const value = parseInt(e.detail.value) || 0;
-    const db = wx.cloud.database();
-    await db.collection('subscribe_config').doc(this.data.subConfig._id).update({ data: { [field]: value } });
+    await callFunction('adminAction', { action: 'update', collection: 'subscribe_config', docId: this.data.subConfig._id, data: { [field]: value } });
     wx.showToast({ title: '已更新', icon: 'success' });
   },
 
@@ -129,8 +122,7 @@ Page({
   async updateInvite(e) {
     const { field } = e.currentTarget.dataset;
     const value = parseInt(e.detail.value) || 0;
-    const db = wx.cloud.database();
-    await db.collection('invite_config').doc(this.data.inviteConfig._id).update({ data: { [field]: value } });
+    await callFunction('adminAction', { action: 'update', collection: 'invite_config', docId: this.data.inviteConfig._id, data: { [field]: value } });
     wx.showToast({ title: '已更新', icon: 'success' });
   },
 });

@@ -1,5 +1,6 @@
 const app = getApp();
 const { CATEGORIES, CATEGORY_LABELS } = require('../../../utils/constants');
+const { callFunction } = require('../../../utils/cloud');
 
 Page({
   data: {
@@ -35,9 +36,9 @@ Page({
   // ---- toggle ----
   async toggleModel(e) {
     const { id, active } = e.currentTarget.dataset;
-    const db = wx.cloud.database();
-    await db.collection('model_configs').doc(id).update({
-      data: { is_active: !active, updated_at: new Date() }
+    await callFunction('adminAction', {
+      action: 'update', collection: 'model_configs', docId: id,
+      data: { is_active: !active }
     });
     this.loadModels();
   },
@@ -105,16 +106,19 @@ Page({
     }
 
     this.setData({ saving: true });
-    const db = wx.cloud.database();
     const category = categoryOptions[formCategoryIdx].key;
     const payload = { ...formData, config, category, updated_at: new Date() };
 
     try {
       if (editingId) {
-        await db.collection('model_configs').doc(editingId).update({ data: payload });
+        await callFunction('adminAction', {
+          action: 'update', collection: 'model_configs', docId: editingId, data: payload
+        });
       } else {
         payload.is_active = false;
-        await db.collection('model_configs').add({ data: payload });
+        await callFunction('adminAction', {
+          action: 'add', collection: 'model_configs', data: payload
+        });
       }
       wx.showToast({ title: editingId ? '已更新' : '已添加', icon: 'success' });
       this.setData({ showForm: false });
