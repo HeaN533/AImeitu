@@ -2,7 +2,7 @@ const { getTempURL, callFunction } = require('../../utils/cloud');
 const { DEFAULT_PRICES } = require('../../utils/constants');
 
 Page({
-  data: { imageId: '', previewFileID: '', previewUrl: '', price: 0, downloading: false },
+  data: { imageId: '', previewFileID: '', previewUrl: '', price: 0, downloading: false, category: '', originalFileID: '' },
 
   onLoad(options) {
     const imageId = options.imageId;
@@ -23,14 +23,17 @@ Page({
     const db = wx.cloud.database();
     const img = await db.collection('images').doc(imageId).get();
     const price = DEFAULT_PRICES[img.data.process_type] || 2;
-    this.setData({ price });
+    this.setData({
+      price,
+      category: img.data.process_type,
+      originalFileID: img.data.original_url
+    });
   },
 
   async download() {
     this.setData({ downloading: true });
     try {
       const res = await callFunction('downloadImage', { imageId: this.data.imageId });
-      // 保存到相册
       const url = await getTempURL(res.resultFileID);
       wx.downloadFile({
         url,
@@ -48,7 +51,9 @@ Page({
   },
 
   retry() {
-    wx.navigateBack();
+    wx.redirectTo({
+      url: '/pages/process/process?category=' + this.data.category + '&fileID=' + this.data.originalFileID
+    });
   },
 
   goHome() {
