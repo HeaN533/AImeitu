@@ -1,4 +1,5 @@
 const app = getApp();
+const { callFunction } = require('../../../utils/cloud');
 Page({
   data: { list: [], showForm: false, saving: false, editingId: '', formData: {} },
 
@@ -18,8 +19,10 @@ Page({
 
   async toggle(e) {
     const { id, active } = e.currentTarget.dataset;
-    const db = wx.cloud.database();
-    await db.collection('activities').doc(id).update({ data: { is_active: !active } });
+    await callFunction('adminAction', {
+      action: 'update', collection: 'activities', docId: id,
+      data: { is_active: !active }
+    });
     this.load();
   },
 
@@ -77,7 +80,6 @@ Page({
     if (!formData.name) { wx.showToast({ title: '请输入活动名称', icon: 'none' }); return; }
 
     this.setData({ saving: true });
-    const db = wx.cloud.database();
     const payload = {
       name: formData.name,
       description: formData.description,
@@ -88,11 +90,9 @@ Page({
 
     try {
       if (editingId) {
-        await db.collection('activities').doc(editingId).update({ data: payload });
+        await callFunction('adminAction', { action: 'update', collection: 'activities', docId: editingId, data: payload });
       } else {
-        await db.collection('activities').add({
-          data: { ...payload, is_active: true, created_at: new Date() }
-        });
+        await callFunction('adminAction', { action: 'add', collection: 'activities', data: { ...payload, is_active: true, created_at: new Date() } });
       }
       wx.showToast({ title: editingId ? '已更新' : '已创建', icon: 'success' });
       this.setData({ showForm: false });
@@ -106,14 +106,9 @@ Page({
 
   async deleteAct(e) {
     const id = e.currentTarget.dataset.id;
-    wx.showModal({
-      title: '确认删除？',
-      success: async (res) => {
-        if (!res.confirm) return;
-        const db = wx.cloud.database();
-        await db.collection('activities').doc(id).remove();
-        this.load();
-      },
-    });
+    const res = await wx.showModal({ title: '确认删除', content: '删除后不可恢复' });
+    if (!res.confirm) return;
+    await callFunction('adminAction', { action: 'remove', collection: 'activities', docId: id });
+    this.load();
   },
 });

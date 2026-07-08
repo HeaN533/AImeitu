@@ -14,6 +14,10 @@ async function fulfillOrder(order) {
       });
     }
 
+    const streamCount = await transaction.collection('token_records')
+      .where({ related_order: order._id, type: 'purchase' }).count();
+    if (streamCount.total > 0) return;
+
     await transaction.collection('users').where({ _openid: order.user_id }).update({
       data: { tokens: _.inc(order.tokens) }
     });

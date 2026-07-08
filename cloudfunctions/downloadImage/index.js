@@ -95,13 +95,15 @@ exports.main = async (event, context) => {
       const cfgRes = await db.collection('invite_config').limit(1).get();
       const cfg = cfgRes.data[0] || { inviter_reward: 10, invitee_reward: 5 };
 
+      const inviterUserRes = await db.collection('users').doc(invite.inviter_id).get();
+      const inviterBalance = inviterUserRes.data.tokens || 0;
       await db.collection('users').doc(invite.inviter_id).update({
         data: { tokens: _.inc(cfg.inviter_reward) }
       });
       await db.collection('token_records').add({
         data: {
           user_id: invite.inviter_id, type: 'invite', token_type: 'permanent',
-          amount: cfg.inviter_reward, balance_after: 0,
+          amount: cfg.inviter_reward, balance_after: inviterBalance + cfg.inviter_reward,
           created_at: new Date(), _openid: invite.inviter_id,
         }
       });

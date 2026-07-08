@@ -15,6 +15,9 @@ exports.main = async (event, context) => {
   const cfg = cfgRes.data[0];
   if (!cfg.is_active) return { err: '广告功能已关闭' };
 
+  const userRes = await db.collection('users').where({ _openid: OPENID }).get();
+  if (userRes.data.length === 0) return { err: '用户不存在' };
+
   const today = todayBeijing();
   const todayStart = new Date(today + 'T00:00:00+08:00');
   const countRes = await db.collection('token_records')
@@ -26,17 +29,22 @@ exports.main = async (event, context) => {
 
   const rewardTokens = cfg.reward_tokens || 2;
 
-  await db.collection('users').where({ _openid: OPENID }).update({
-    data: { tokens: _.inc(rewardTokens) }
-  });
+  await db.runTransaction(async transaction => {
+    const txUserRes = await transaction.collection('users').where({ _openid: OPENID }).get();
+    if (txUserRes.data.length === 0) return { err: '用户不存在' };
 
-  const updatedUser = await db.collection('users').where({ _openid: OPENID }).get();
-  await db.collection('token_records').add({
-    data: {
-      user_id: OPENID, type: 'ad', token_type: 'permanent',
-      amount: rewardTokens, balance_after: updatedUser.data[0].tokens,
-      created_at: new Date(), _openid: OPENID,
-    }
+    await transaction.collection('users').where({ _openid: OPENID }).update({
+      data: { tokens: _.inc(rewardTokens) }
+    });
+
+    const afterRes = await transaction.collection('users').where({ _openid: OPENID }).get();
+    await transaction.collection('token_records').add({
+      data: {
+        user_id: OPENID, type: 'ad', token_type: 'permanent',
+        amount: rewardTokens, balance_after: afterRes.data[0].tokens,
+        created_at: new Date(), _openid: OPENID,
+      }
+    });
   });
 
   return { tokens: rewardTokens, remainingToday: cfg.daily_limit - countRes.total - 1 };
