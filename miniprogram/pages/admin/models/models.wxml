@@ -17,6 +17,7 @@
         </view>
       </view>
       <switch checked="{{item.is_active}}" data-id="{{item._id}}" data-active="{{item.is_active}}" catchtap="toggleModel" />
+      <button class="weui-btn weui-btn_mini" data-id="{{item._id}}" catchtap="testModel">测试</button>
     </view>
 
     <button class="weui-btn weui-btn_mini weui-btn_default" data-category="{{item.key}}" bindtap="showAddForm">+ 添加模型</button>

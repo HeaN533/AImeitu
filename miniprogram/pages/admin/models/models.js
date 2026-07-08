@@ -43,6 +43,23 @@ Page({
     this.loadModels();
   },
 
+  async testModel(e) {
+    const { id } = e.currentTarget.dataset;
+    wx.showLoading({ title: '测试中...' });
+    try {
+      const res = await callFunction('testModel', { modelId: id });
+      wx.hideLoading();
+      if (res.ok) {
+        wx.showToast({ title: '连通成功 ' + res.latency + 'ms', icon: 'success' });
+      } else {
+        wx.showToast({ title: '失败: ' + (res.error || '未知错误'), icon: 'none', duration: 4000 });
+      }
+    } catch (err) {
+      wx.hideLoading();
+      wx.showToast({ title: '测试请求失败', icon: 'none' });
+    }
+  },
+
   // ---- add ----
   showAddForm(e) {
     const category = e.currentTarget.dataset.category;
