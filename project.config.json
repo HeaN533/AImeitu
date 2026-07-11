@@ -29,7 +29,7 @@
       "outputPath": ""
     }
   },
-  "appid": "wxf11fbab4f82d1e3a",
+  "appid": "YOUR_APPID_HERE",
   "projectname": "ai-photo-beautify",
   "libVersion": "3.3.4",
   "compileType": "miniprogram",

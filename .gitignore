@@ -6,7 +6,7 @@ node_modules/
 cloudfunctions/*/node_modules/
 
 # 本地 IDE / 工具配置（含本地云环境 ID 等私有信息）
-.project.private.config.json
+project.private.config.json
 miniprogram_navigator_user_files.json
 
 # 日志与临时文件
