@@ -1,10 +1,10 @@
 const app = getApp();
-const { CATEGORY_LABELS } = require('../../../utils/constants');
+const { CATEGORY_LABELS, SUB_TYPES } = require('../../../utils/constants');
 const { callFunction } = require('../../../utils/cloud');
 
 Page({
   data: {
-    activeTab: 'price', pricingList: [], packages: [], subConfig: {}, inviteConfig: {}, adConfig: {},
+    activeTab: 'price', pricingGroups: [], packages: [], subConfig: {}, inviteConfig: {}, adConfig: {},
     showForm: false, saving: false, editingId: '', formData: {},
   },
 
@@ -15,15 +15,35 @@ Page({
 
   async loadAll() {
     const db = wx.cloud.database();
+    const safe = async (fn, fallback) => {
+      try { return await fn(); } catch (e) { console.warn('loadAll 子查询失败:', e.errMsg || e.message); return fallback; }
+    };
     const [pr, pk, sc, ic, ac] = await Promise.all([
-      db.collection('pricing_config').get(),
-      db.collection('token_packages').orderBy('price', 'asc').get(),
-      db.collection('subscribe_config').limit(1).get(),
-      db.collection('invite_config').limit(1).get(),
-      db.collection('ad_config').limit(1).get(),
+      safe(() => db.collection('pricing_config').get(), { data: [] }),
+      safe(() => db.collection('token_packages').orderBy('price', 'asc').get(), { data: [] }),
+      safe(() => db.collection('subscribe_config').limit(1).get(), { data: [] }),
+      safe(() => db.collection('invite_config').limit(1).get(), { data: [] }),
+      safe(() => db.collection('ad_config').limit(1).get(), { data: [] }),
     ]);
+    // 定价按大类分组，每组含子选项列表
+    const SUB_LABELS = {};
+    Object.keys(SUB_TYPES).forEach(cat => {
+      SUB_LABELS[cat] = {};
+      SUB_TYPES[cat].forEach(s => { SUB_LABELS[cat][s.key] = s.label; });
+    });
+    const priceGroups = {};
+    pr.data.forEach(p => {
+      if (!priceGroups[p.category]) priceGroups[p.category] = [];
+      priceGroups[p.category].push({
+        ...p,
+        subLabel: SUB_LABELS[p.category] && SUB_LABELS[p.category][p.sub_type] || p.sub_type,
+      });
+    });
+    const pricingGroups = Object.keys(CATEGORY_LABELS).map(cat => ({
+      key: cat, label: CATEGORY_LABELS[cat], items: priceGroups[cat] || [],
+    }));
     this.setData({
-      pricingList: pr.data.map(p => ({ ...p, label: CATEGORY_LABELS[p.category] || p.category })),
+      pricingGroups,
       packages: pk.data.map(p => ({ ...p, priceInYuan: (p.price / 100).toFixed(2) })),
       subConfig: sc.data[0] || { price: 1999, daily_tokens: 5 },
       inviteConfig: ic.data[0] || { inviter_reward: 10, invitee_reward: 5 },
@@ -34,12 +54,6 @@ Page({
   switchTab(e) { this.setData({ activeTab: e.currentTarget.dataset.tab }); },
 
   // ---- pricing ----
-  onPricingInput(e) {
-    const { index, field } = e.currentTarget.dataset;
-    const value = parseInt(e.detail.value) || 0;
-    this.setData({ ['pricingList[' + index + '].' + field]: value });
-  },
-
   async updatePricing(e) {
     const { id, field } = e.currentTarget.dataset;
     const value = parseInt(e.detail.value) || 0;

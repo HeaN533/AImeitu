@@ -14,9 +14,17 @@ exports.main = async (event, context) => {
 
   if (image.is_downloaded) return { resultFileID: image.result_url };
 
-  const priceRes = await db.collection('pricing_config')
-    .where({ category: image.process_type }).get();
-  const price = priceRes.data.length > 0 ? priceRes.data[0].tokens : 2;
+  // 3. 获取定价（按子选项，fallback 到大类默认价）
+  let price = 2;
+  const subPriceRes = await db.collection('pricing_config')
+    .where({ category: image.process_type, sub_type: image.sub_type }).get();
+  if (subPriceRes.data.length > 0) {
+    price = subPriceRes.data[0].tokens;
+  } else {
+    const catPriceRes = await db.collection('pricing_config')
+      .where({ category: image.process_type }).limit(1).get();
+    if (catPriceRes.data.length > 0) price = catPriceRes.data[0].tokens;
+  }
 
   const userRes = await db.collection('users').where({ _openid: OPENID }).get();
   if (userRes.data.length === 0) return { err: '用户不存在' };

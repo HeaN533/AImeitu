@@ -21,7 +21,6 @@ Component({
           const validation = validateImage({
             name: file.tempFilePath,
             size: file.size,
-            fileType: file.fileType || '',
           });
           if (!validation.valid) {
             this.setData({ error: validation.error });

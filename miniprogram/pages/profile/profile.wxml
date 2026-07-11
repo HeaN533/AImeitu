@@ -35,6 +35,9 @@
     <button class="m-item m-share-btn" open-type="share">
       <text class="m-icon">💌</text><text class="m-text">邀请好友<text class="m-sub">双方各得奖励</text></text><text class="m-arrow">›</text>
     </button>
+    <view class="m-item" bindtap="watchAd">
+      <text class="m-icon">📺</text><text class="m-text">看广告领代币<text class="m-sub">今日剩余 {{adRemaining}} 次</text></text><text class="m-arrow">›</text>
+    </view>
     <view class="m-item" wx:if="{{isAdmin}}" bindtap="goAdmin">
       <text class="m-icon">⚙️</text><text class="m-text">管理后台</text><text class="m-arrow">›</text>
     </view>

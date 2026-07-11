@@ -6,7 +6,7 @@
 
   <view class="pv-info">
     <text class="pv-info-icon">💡</text>
-    <text>预览图含水印，下载原图消耗 {{price}} 代币</text>
+    <text>预览图含水印，下载原图消耗 {{price}} 代币 [v2]</text>
   </view>
 
   <button class="pv-primary" bindtap="download" loading="{{downloading}}">

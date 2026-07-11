@@ -20,21 +20,43 @@ exports.main = async (event, context) => {
     }
   }
 
-  // 默认定价配置
+  // 默认定价配置（按子选项，非大类）
+  // 检测旧格式记录（无 sub_type 字段），如有则清理后重新插入
+  const oldPcRes = await db.collection('pricing_config').where({ sub_type: db.command.exists(false) }).get();
+  if (oldPcRes.data.length > 0) {
+    const _ = db.command;
+    for (const old of oldPcRes.data) {
+      await db.collection('pricing_config').doc(old._id).remove();
+    }
+    results['old_pricing_cleaned'] = oldPcRes.data.length;
+  }
+
   const pc = await db.collection('pricing_config').count();
   if (pc.total === 0) {
     const prices = [
-      { category: 'beautify', tokens: 2 },
-      { category: 'color', tokens: 1 },
-      { category: 'style', tokens: 3 },
-      { category: 'auto', tokens: 2 },
+      { category: 'beautify', sub_type: 'smooth', tokens: 2 },
+      { category: 'beautify', sub_type: 'whiten', tokens: 2 },
+      { category: 'beautify', sub_type: 'thin_face', tokens: 3 },
+      { category: 'beautify', sub_type: 'big_eyes', tokens: 3 },
+      { category: 'beautify', sub_type: 'acne_removal', tokens: 2 },
+      { category: 'color', sub_type: 'auto_tone', tokens: 1 },
+      { category: 'color', sub_type: 'filter', tokens: 1 },
+      { category: 'color', sub_type: 'sharpen', tokens: 1 },
+      { category: 'color', sub_type: 'dehaze_denoise', tokens: 2 },
+      { category: 'color', sub_type: 'lighting', tokens: 2 },
+      { category: 'style', sub_type: 'anime', tokens: 3 },
+      { category: 'style', sub_type: 'oil_painting', tokens: 3 },
+      { category: 'style', sub_type: 'ink', tokens: 3 },
+      { category: 'style', sub_type: 'sketch', tokens: 2 },
+      { category: 'style', sub_type: 'pixel', tokens: 3 },
+      { category: 'auto', sub_type: 'auto_enhance', tokens: 2 },
     ];
     for (const p of prices) {
       await db.collection('pricing_config').add({
         data: { ...p, updated_at: new Date() }
       });
     }
-    results['default_pricing'] = 'inserted 4';
+    results['default_pricing'] = 'inserted 16';
   }
 
   // 默认订阅配置

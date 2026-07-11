@@ -1,4 +1,6 @@
 const app = getApp();
+const AD_UNIT_ID = 'adunit-xxxxxxxxxx';
+let rewardedVideoAd = null;
 const { callFunction } = require('../../utils/cloud');
 
 const TYPE_LABELS = {
@@ -7,7 +9,7 @@ const TYPE_LABELS = {
 };
 
 Page({
-  data: { userId: '', tokens: 0, activityTokens: 0, isAdmin: false, recentRecords: [] },
+  data: { userId: '', tokens: 0, activityTokens: 0, isAdmin: false, recentRecords: [], adRemaining: 0 },
 
   onShow: async function () {
     const user = await app.getUserInfo();
@@ -18,6 +20,7 @@ Page({
       isAdmin: app.globalData.isAdmin,
     });
     this.loadRecords();
+    this.loadAdRemaining();
   },
 
   async loadRecords() {
@@ -63,5 +66,64 @@ Page({
       title: 'AI 图片美化 — 免费体验智能修图',
       path: '/pages/index/index?inviter=' + fullId,
     };
+  },
+
+  async loadAdRemaining() {
+    try {
+      const db = wx.cloud.database();
+      const cfgRes = await db.collection('ad_config').limit(1).get();
+      if (cfgRes.data.length === 0 || !cfgRes.data[0].is_active) {
+        this.setData({ adRemaining: 0 });
+        return;
+      }
+      const cfg = cfgRes.data[0];
+      const today = new Date(Date.now() + 8 * 3600 * 1000).toISOString().slice(0, 10);
+      const todayStart = new Date(today + 'T00:00:00+08:00');
+      const _ = db.command;
+      const countRes = await db.collection('token_records')
+        .where({ _openid: '{openid}', type: 'ad', created_at: _.gte(todayStart) }).count();
+      this.setData({ adRemaining: Math.max(0, cfg.daily_limit - countRes.total) });
+    } catch (e) {
+      this.setData({ adRemaining: 0 });
+    }
+  },
+
+  watchAd() {
+    if (!rewardedVideoAd) {
+      try {
+        rewardedVideoAd = wx.createRewardedVideoAd({ adUnitId: AD_UNIT_ID });
+        rewardedVideoAd.onClose((res) => {
+          if (res && res.isEnded) {
+            this.handleAdComplete();
+          } else {
+            wx.showToast({ title: '需看完广告才能领取', icon: 'none' });
+          }
+        });
+        rewardedVideoAd.onError((err) => {
+          console.error('广告加载失败:', err);
+          wx.showToast({ title: '广告加载失败，请稍后重试', icon: 'none' });
+        });
+      } catch (e) {
+        wx.showToast({ title: '当前环境不支持广告', icon: 'none' });
+        return;
+      }
+    }
+    rewardedVideoAd.show().catch(() => {
+      rewardedVideoAd.load().then(() => rewardedVideoAd.show());
+    });
+  },
+
+  async handleAdComplete() {
+    try {
+      const res = await callFunction('rewardAd', {});
+      if (res.err) {
+        wx.showToast({ title: res.err, icon: 'none' });
+        return;
+      }
+      wx.showToast({ title: '+' + res.tokens + ' 代币', icon: 'success' });
+      this.setData({ adRemaining: res.remainingToday });
+      app.refreshUserInfo();
+      this.onShow();
+    } catch (e) { /* toast already shown */ }
   },
 });

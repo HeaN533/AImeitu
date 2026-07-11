@@ -46,17 +46,29 @@ Page({
   async testModel(e) {
     const { id } = e.currentTarget.dataset;
     wx.showLoading({ title: '测试中...' });
+    let loadingActive = true;
     try {
       const res = await callFunction('testModel', { modelId: id });
       wx.hideLoading();
+      loadingActive = false;
       if (res.ok) {
         wx.showToast({ title: '连通成功 ' + res.latency + 'ms', icon: 'success' });
       } else {
-        wx.showToast({ title: '失败: ' + (res.error || '未知错误'), icon: 'none', duration: 4000 });
+        console.error('[testModel] 失败详情:', res);
+        wx.showModal({
+          title: '测试失败',
+          content: String(res.error || '未知错误').slice(0, 200),
+          showCancel: false,
+        });
       }
     } catch (err) {
-      wx.hideLoading();
-      wx.showToast({ title: '测试请求失败', icon: 'none' });
+      if (loadingActive) { wx.hideLoading(); loadingActive = false; }
+      console.error('[testModel] 请求异常:', err);
+      wx.showModal({
+        title: '测试请求失败',
+        content: String(err && (err.errMsg || err.message) || err).slice(0, 200),
+        showCancel: false,
+      });
     }
   },
 

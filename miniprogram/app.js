@@ -3,7 +3,7 @@ App({
     if (!wx.cloud) {
       console.error('请使用 2.2.3 或以上的基础库以使用云能力');
     } else {
-      wx.cloud.init({ env: 'YOUR_ENV_ID', traceUser: true });
+      wx.cloud.init({ env: 'cloud1-d4gtgvys2156b7b53', traceUser: true });
     }
     this.globalData = { userInfo: null, isAdmin: false, inviterId: '' };
     try {

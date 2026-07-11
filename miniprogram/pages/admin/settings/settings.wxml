@@ -10,12 +10,15 @@
 
   <!-- 消耗定价 Tab -->
   <view wx:if="{{activeTab==='price'}}" class="tab-content">
-    <view class="tab-hint">设置每种美化的单次消耗代币数</view>
-    <view class="setting-item" wx:for="{{pricingList}}" wx:key="_id" wx:for-index="idx">
-      <text class="setting-label">{{item.label}}</text>
-      <input class="setting-input" type="number" value="{{item.tokens}}" data-id="{{item._id}}" data-index="{{idx}}" data-field="tokens" bindinput="onPricingInput" bindblur="updatePricing" />
-      <text class="setting-unit">代币/次</text>
-    </view>
+    <view class="tab-hint">设置每个美化选项的单次消耗代币数</view>
+    <block wx:for="{{pricingGroups}}" wx:key="key" wx:for-item="group">
+      <view class="price-group-title">{{group.label}}</view>
+      <view class="setting-item" wx:for="{{group.items}}" wx:key="_id" wx:for-item="sub" wx:for-index="sidx">
+        <text class="setting-label">{{sub.subLabel}}</text>
+        <input class="setting-input" type="number" value="{{sub.tokens}}" data-id="{{sub._id}}" data-field="tokens" bindblur="updatePricing" />
+        <text class="setting-unit">代币/次</text>
+      </view>
+    </block>
   </view>
 
   <!-- 套餐 Tab -->
