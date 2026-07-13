@@ -1,17 +1,31 @@
 <view class="container">
-  <view class="bg-gradient"></view>
+  <view class="glass-bg"></view>
+
   <view class="hero">
     <view class="hero-title">AI 图片美化</view>
-    <view class="hero-sub">一键智能修图 · 让每张照片更出彩</view>
+    <view class="hero-sub">让每张照片变成艺术品</view>
     <token-badge tokens="{{tokens}}" activityTokens="{{activityTokens}}" />
   </view>
 
-  <view class="category-grid">
-    <view class="c-card c-beautify" wx:for="{{categories}}" wx:key="key"
+  <view class="main-grid">
+    <view class="main-card glass-card" wx:for="{{mainCards}}" wx:key="key"
       data-category="{{item.key}}" bindtap="goProcess">
-      <view class="c-icon-wrap"><text class="c-icon">{{item.icon}}</text></view>
-      <view class="c-name">{{item.label}}</view>
-      <view class="c-desc">{{item.desc}}</view>
+      <view class="main-icon-wrap"><text class="main-icon">{{item.icon}}</text></view>
+      <view class="main-name">{{item.label}}</view>
+      <view class="main-desc">{{item.desc}}</view>
+    </view>
+  </view>
+
+  <view class="sub-section">
+    <view class="sub-section-title">更多功能</view>
+    <view class="sub-card glass-card-sm" wx:for="{{subCards}}" wx:key="key"
+      data-category="{{item.key}}" bindtap="goProcess">
+      <view class="sub-icon-wrap"><text class="sub-icon">{{item.icon}}</text></view>
+      <view class="sub-info">
+        <view class="sub-name">{{item.label}}</view>
+        <view class="sub-desc">{{item.desc}}</view>
+      </view>
+      <text class="sub-arrow">›</text>
     </view>
   </view>
 </view>
