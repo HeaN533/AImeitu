@@ -10,8 +10,18 @@ Component({
     defaultPrices: DEFAULT_PRICES,
   },
 
+  properties: {
+    initialCategory: { type: String, value: '' },
+  },
+
   lifetimes: {
     attached() {
+      if (this.data.initialCategory && CATEGORIES.includes(this.data.initialCategory)) {
+        this.setData({
+          activeCategory: this.data.initialCategory,
+          currentSubTypes: SUB_TYPES[this.data.initialCategory],
+        });
+      }
       this.loadPrices();
     },
   },

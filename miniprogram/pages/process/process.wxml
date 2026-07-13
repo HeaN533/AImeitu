@@ -9,7 +9,7 @@
     <view class="step-num">2</view>
     <view class="step-label">选择效果</view>
   </view>
-  <effect-picker wx:if="{{fileID}}" bind:select="onEffectSelect" />
+  <effect-picker wx:if="{{fileID}}" initial-category="{{category}}" bind:select="onEffectSelect" />
 
   <button class="go-btn" wx:if="{{fileID && subType}}" bindtap="startProcess" loading="{{processing}}">
     {{processing ? 'AI 处理中...' : '✨ 开始美化'}}
