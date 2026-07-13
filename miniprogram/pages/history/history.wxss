@@ -1,18 +1,23 @@
 .h-item {
   display: flex;
   align-items: center;
-  background: var(--card);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1rpx solid var(--glass-border);
   border-radius: var(--radius);
   padding: 20rpx;
   margin-bottom: 16rpx;
   gap: 20rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+  box-shadow: var(--shadow);
+  position: relative;
+  z-index: 1;
 }
 .h-thumb {
   width: 140rpx; height: 140rpx;
   border-radius: var(--radius-sm);
   flex-shrink: 0;
-  background: #f0f0f0;
+  background: var(--glass-bg);
 }
 .h-info { flex: 1; min-width: 0; }
 .h-title { font-size: 28rpx; font-weight: 600; color: var(--text); margin-bottom: 6rpx; }
@@ -21,11 +26,14 @@
 .h-status.paid { color: var(--primary); }
 .h-status.free { color: var(--warn); }
 .h-btn {
-  background: var(--primary);
+  background: rgba(108,92,231,0.3);
+  backdrop-filter: blur(10rpx);
+  -webkit-backdrop-filter: blur(10rpx);
+  border: 1rpx solid rgba(108,92,231,0.4);
   color: #fff;
   border-radius: 36rpx;
   font-size: 24rpx;
   padding: 12rpx 28rpx;
-  border: none;
   flex-shrink: 0;
 }
+.h-btn::after { border: none; }
