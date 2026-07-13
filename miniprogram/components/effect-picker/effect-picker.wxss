@@ -45,3 +45,63 @@
 .sub-icon { font-size: 48rpx; margin-bottom: 12rpx; }
 .sub-name { font-size: 24rpx; color: var(--text); margin-bottom: 4rpx; }
 .sub-price { font-size: 20rpx; color: var(--text-hint); }
+
+/* ---- 人像美化 slider ---- */
+.beautify-panel {
+  padding: 16rpx 0;
+}
+.b-slider-item {
+  margin-bottom: 32rpx;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.b-slider-label {
+  width: 100%;
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  margin-bottom: 8rpx;
+}
+.b-slider-item slider {
+  flex: 1;
+  margin: 0;
+}
+.b-slider-val {
+  width: 80rpx;
+  text-align: right;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text);
+  margin-left: 16rpx;
+}
+.b-filter-row {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+  border-top: 1rpx solid rgba(255,255,255,0.1);
+}
+.b-filter-label {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  margin-right: 24rpx;
+}
+.b-filter-picker {
+  padding: 12rpx 24rpx;
+  font-size: 26rpx;
+  color: var(--text);
+  background: rgba(255,255,255,0.08);
+  border: 1rpx solid var(--glass-border);
+  border-radius: var(--radius-btn);
+}
+.b-confirm-btn {
+  margin-top: 32rpx;
+  width: 100%;
+  background: rgba(108,92,231,0.3);
+  backdrop-filter: blur(10rpx);
+  border: 1rpx solid rgba(108,92,231,0.4);
+  border-radius: var(--radius-btn);
+  color: #fff;
+  font-size: 30rpx;
+  padding: 20rpx;
+}
+.b-confirm-btn::after { border: none; }

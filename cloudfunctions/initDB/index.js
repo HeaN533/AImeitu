@@ -28,11 +28,7 @@ exports.main = async (event, context) => {
   }
 
   const prices = [
-    { category: 'beautify', sub_type: 'smooth', tokens: 2 },
-    { category: 'beautify', sub_type: 'whiten', tokens: 2 },
-    { category: 'beautify', sub_type: 'thin_face', tokens: 3 },
-    { category: 'beautify', sub_type: 'big_eyes', tokens: 3 },
-    { category: 'beautify', sub_type: 'acne_removal', tokens: 2 },
+    { category: 'beautify', sub_type: 'beautify', tokens: 2 },
     { category: 'filter', sub_type: 'auto_tone', tokens: 1 },
     { category: 'filter', sub_type: 'sharpen', tokens: 1 },
     { category: 'filter', sub_type: 'dehaze_denoise', tokens: 2 },
@@ -52,7 +48,7 @@ exports.main = async (event, context) => {
       data: { ...p, updated_at: new Date() }
     });
   }
-  results['default_pricing'] = 'inserted 18';
+  results['default_pricing'] = 'inserted 14';
 
   // 默认订阅配置
   const sc = await db.collection('subscribe_config').count();

@@ -1,7 +1,7 @@
 const { callFunction } = require('../../utils/cloud');
 
 Page({
-  data: { fileID: '', tempPath: '', category: '', subType: '', processing: false },
+  data: { fileID: '', tempPath: '', category: '', subType: '', processing: false, params: null },
 
   onLoad(options) {
     this.setData({ category: options.category || 'auto' });
@@ -17,7 +17,7 @@ Page({
   },
 
   onEffectSelect(e) {
-    this.setData({ subType: e.detail.subType, category: e.detail.category });
+    this.setData({ subType: e.detail.subType, category: e.detail.category, params: e.detail.params || null });
   },
 
   async startProcess() {
@@ -27,6 +27,7 @@ Page({
         imageFileID: this.data.fileID,
         processType: this.data.category,
         subType: this.data.subType,
+        params: this.data.params || undefined,
       });
       wx.redirectTo({
         url: '/pages/preview/preview?imageId=' + res.imageId + '&previewFileID=' + res.previewFileID,

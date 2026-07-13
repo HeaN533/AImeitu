@@ -17,7 +17,7 @@ async function getActiveModel(category) {
 //    返回 JSON，图片在 result 字段（base64）。
 //  - Bearer Token 类（如 Replicate）：只有 api_key，用 Header Authorization: Bearer，
 //    直接返回二进制图片。
-async function callAIModel(model, imageUrl, processType, subType) {
+async function callAIModel(model, imageUrl, processType, subType, params) {
   const config = model.config || {};
 
   // ---- Face++ 类：双密钥 form-data 鉴权 ----
@@ -26,18 +26,21 @@ async function callAIModel(model, imageUrl, processType, subType) {
     form.append('api_key', model.api_key);
     form.append('api_secret', model.api_secret);
     form.append('image_url', imageUrl);
-    // 合并 model.config 里的可选参数（whitening/smoothing/eye_brightening/...）
+    // model.config 作为基础参数
     Object.keys(config).forEach(k => form.append(k, config[k]));
+    // 用户前端 params 覆盖/补充（如 whitening/smoothing/thinface/enlarge_eye/filter_type）
+    if (params) {
+      Object.keys(params).forEach(k => form.append(k, params[k]));
+    }
 
     const res = await axios.post(model.api_url, form, {
       headers: form.getHeaders(),
-      timeout: 25000,
+      timeout: 30000,
     });
     const json = res.data;
     if (!json || !json.result) {
       throw new Error('AI 处理失败：' + (json && json.error_message ? json.error_message : JSON.stringify(json)));
     }
-    // result 是 base64 编码的图片
     return Buffer.from(json.result, 'base64');
   }
 
@@ -46,17 +49,18 @@ async function callAIModel(model, imageUrl, processType, subType) {
     image_url: imageUrl,
     task_type: subType,
     ...config,
+    ...(params || {}),
   };
   const res = await axios.post(model.api_url, payload, {
     headers: { 'Authorization': 'Bearer ' + model.api_key, 'Content-Type': 'application/json' },
-    timeout: 25000,
+    timeout: 30000,
     responseType: 'arraybuffer',
   });
   return Buffer.from(res.data);
 }
 
 exports.main = async (event, context) => {
-  const { imageFileID, processType, subType } = event;
+  const { imageFileID, processType, subType, params } = event;
   if (!imageFileID || !processType || !subType) {
     return { err: '缺少必要参数' };
   }
@@ -70,8 +74,8 @@ exports.main = async (event, context) => {
   // 2. 查询启用的模型
   const model = await getActiveModel(processType);
 
-  // 3. 调用 AI 处理，得到结果图二进制
-  const resultBuffer = await callAIModel(model, imageUrl, processType, subType);
+  // 3. 调用 AI 处理，传入 params
+  const resultBuffer = await callAIModel(model, imageUrl, processType, subType, params || undefined);
 
   // 4. 预览图直接复用结果图（水印由前端 CSS 叠加，避免引入 sharp 原生模块依赖）
   const previewBuffer = resultBuffer;

@@ -6,13 +6,8 @@ const CATEGORY_LABELS = {
 };
 
 const SUB_TYPES = {
-  beautify: [
-    { key: 'smooth', label: '磨皮美肤' },
-    { key: 'whiten', label: '智能美白' },
-    { key: 'thin_face', label: '瘦脸塑形' },
-    { key: 'big_eyes', label: '大眼亮眼' },
-    { key: 'acne_removal', label: '祛痘去皱' },
-  ],
+  beautify: [],
+
   filter: [
     { key: 'auto_tone', label: '智能调色' },
     { key: 'sharpen', label: '清晰度增强' },
@@ -36,7 +31,26 @@ const DEFAULT_PRICES = { beautify: 2, filter: 1, style: 3 };
 const SUPPORTED_FORMATS = ['jpg', 'jpeg', 'png', 'heic', 'webp'];
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
+// 人像美化参数默认值
+const BEAUTY_DEFAULTS = {
+  whitening: 50,
+  smoothing: 50,
+  thinface: 0,
+  enlarge_eye: 0,
+};
+
+// 滤镜选项（人像美化 tab 下拉选择）
+const FILTER_OPTIONS = [
+  { key: '', label: '不使用滤镜' },
+  { key: 'beautify', label: '美肤' },
+  { key: 'sakura', label: '樱花' },
+  { key: 'warm', label: '暖暖' },
+  { key: 'old_times', label: '旧时光' },
+  { key: 'lomo', label: 'LOMO' },
+];
+
 module.exports = {
   CATEGORIES, CATEGORY_LABELS, SUB_TYPES, DEFAULT_PRICES,
   SUPPORTED_FORMATS, MAX_FILE_SIZE,
+  BEAUTY_DEFAULTS, FILTER_OPTIONS,
 };

@@ -4,13 +4,47 @@
       wx:for="{{categories}}" wx:key="key"
       data-key="{{item.key}}" bindtap="switchCategory">{{item.label}}</view>
   </scroll-view>
-  <view class="subs">
+
+  <!-- 人像美化：slider + 滤镜选择 -->
+  <view wx:if="{{isBeautify}}" class="beautify-panel">
+    <view class="b-slider-item">
+      <view class="b-slider-label">美白程度</view>
+      <slider min="0" max="100" value="{{bParams.whitening}}" data-field="whitening" bindchange="onSliderChange" activeColor="#6c5ce7" block-size="20" />
+      <text class="b-slider-val">{{bParams.whitening}}</text>
+    </view>
+    <view class="b-slider-item">
+      <view class="b-slider-label">磨皮程度</view>
+      <slider min="0" max="100" value="{{bParams.smoothing}}" data-field="smoothing" bindchange="onSliderChange" activeColor="#6c5ce7" block-size="20" />
+      <text class="b-slider-val">{{bParams.smoothing}}</text>
+    </view>
+    <view class="b-slider-item">
+      <view class="b-slider-label">瘦脸程度</view>
+      <slider min="0" max="100" value="{{bParams.thinface}}" data-field="thinface" bindchange="onSliderChange" activeColor="#6c5ce7" block-size="20" />
+      <text class="b-slider-val">{{bParams.thinface}}</text>
+    </view>
+    <view class="b-slider-item">
+      <view class="b-slider-label">大眼程度</view>
+      <slider min="0" max="100" value="{{bParams.enlarge_eye}}" data-field="enlarge_eye" bindchange="onSliderChange" activeColor="#6c5ce7" block-size="20" />
+      <text class="b-slider-val">{{bParams.enlarge_eye}}</text>
+    </view>
+    <view class="b-filter-row">
+      <text class="b-filter-label">滤镜</text>
+      <picker mode="selector" range="{{filterOptions}}" range-key="label" value="{{bFilterIdx}}" bindchange="onFilterChange">
+        <view class="b-filter-picker">{{filterOptions[bFilterIdx].label}} ▼</view>
+      </picker>
+    </view>
+    <button class="b-confirm-btn" bindtap="confirmBeautify">
+      使用此参数 · {{priceMap['beautify_beautify'] || defaultPrices['beautify']}} 代币
+    </button>
+  </view>
+
+  <!-- 风格/滤镜转换：子选项网格 -->
+  <view class="subs" wx:else>
     <view class="sub {{selectedSubType === item.key ? 'on' : ''}}"
       wx:for="{{currentSubTypes}}" wx:key="key"
       data-key="{{item.key}}" bindtap="selectSubType">
       <view class="sub-icon">
-        <text wx:if="{{activeCategory === 'beautify'}}">✨</text>
-        <text wx:elif="{{activeCategory === 'filter'}}">📸</text>
+        <text wx:if="{{activeCategory === 'filter'}}">📸</text>
         <text wx:elif="{{activeCategory === 'style'}}">🎭</text>
         <text wx:else>🎨</text>
       </view>

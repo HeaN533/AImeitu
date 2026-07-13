@@ -1,4 +1,4 @@
-const { CATEGORIES, CATEGORY_LABELS, SUB_TYPES, DEFAULT_PRICES } = require('../../utils/constants');
+const { CATEGORIES, CATEGORY_LABELS, SUB_TYPES, DEFAULT_PRICES, BEAUTY_DEFAULTS, FILTER_OPTIONS } = require('../../utils/constants');
 
 Component({
   data: {
@@ -8,6 +8,11 @@ Component({
     selectedSubType: '',
     priceMap: {},
     defaultPrices: DEFAULT_PRICES,
+    // 人像美化 slider 参数
+    bParams: { ...BEAUTY_DEFAULTS },
+    bFilterIdx: 0,
+    filterOptions: FILTER_OPTIONS,
+    isBeautify: true,
   },
 
   properties: {
@@ -16,12 +21,13 @@ Component({
 
   lifetimes: {
     attached() {
-      if (this.data.initialCategory && CATEGORIES.includes(this.data.initialCategory)) {
-        this.setData({
-          activeCategory: this.data.initialCategory,
-          currentSubTypes: SUB_TYPES[this.data.initialCategory],
-        });
-      }
+      const initCat = this.data.initialCategory && CATEGORIES.includes(this.data.initialCategory)
+        ? this.data.initialCategory : 'beautify';
+      this.setData({
+        activeCategory: initCat,
+        currentSubTypes: SUB_TYPES[initCat],
+        isBeautify: initCat === 'beautify',
+      });
       this.loadPrices();
     },
   },
@@ -37,7 +43,7 @@ Component({
         });
         this.setData({ priceMap: map });
       } catch (e) {
-        console.warn('[effect-picker] 加载定价失败，用默认值', e);
+        console.warn('[effect-picker] 加载定价失败', e);
       }
     },
 
@@ -53,6 +59,7 @@ Component({
         activeCategory: cat,
         currentSubTypes: SUB_TYPES[cat],
         selectedSubType: '',
+        isBeautify: cat === 'beautify',
       });
     },
 
@@ -64,6 +71,30 @@ Component({
         category: this.data.activeCategory,
         subType: subType,
         price: price,
+      });
+    },
+
+    // ---- 人像美化 slider ----
+    onSliderChange(e) {
+      const field = e.currentTarget.dataset.field;
+      const value = e.detail.value;
+      this.setData({ ['bParams.' + field]: value });
+    },
+
+    onFilterChange(e) {
+      this.setData({ bFilterIdx: parseInt(e.detail.value) });
+    },
+
+    confirmBeautify() {
+      const params = { ...this.data.bParams };
+      const filterKey = FILTER_OPTIONS[this.data.bFilterIdx].key;
+      if (filterKey) params.filter_type = filterKey;
+      const price = this.getPrice('beautify', 'beautify');
+      this.triggerEvent('select', {
+        category: 'beautify',
+        subType: 'beautify',
+        price: price,
+        params: params,
       });
     },
   },
