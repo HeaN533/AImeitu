@@ -4,7 +4,7 @@ Page({
   data: { fileID: '', tempPath: '', category: '', subType: '', processing: false, params: null },
 
   onLoad(options) {
-    this.setData({ category: options.category || 'auto' });
+    this.setData({ category: options.category || 'beautify' });
     if (options.fileID) {
       this.setData({ fileID: options.fileID, tempPath: '' });
       const uploader = this.selectComponent('#uploader');
