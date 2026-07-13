@@ -1,4 +1,5 @@
 <view class="container">
+  <view class="glass-bg"></view>
   <view class="admin-title">活动管理</view>
 
   <view class="activity-card" wx:for="{{list}}" wx:key="_id" data-id="{{item._id}}" bindtap="editActivity">

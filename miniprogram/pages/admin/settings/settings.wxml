@@ -1,4 +1,5 @@
 <view class="container">
+  <view class="glass-bg"></view>
   <view class="admin-title">配置管理</view>
   <view class="tab-bar">
     <view class="tab {{activeTab==='price'?'active':''}}" bindtap="switchTab" data-tab="price">消耗定价</view>

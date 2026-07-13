@@ -1,4 +1,5 @@
 <view class="container">
+  <view class="glass-bg"></view>
   <view class="admin-title">模型配置</view>
 
   <view class="category-section" wx:for="{{categories}}" wx:key="key">

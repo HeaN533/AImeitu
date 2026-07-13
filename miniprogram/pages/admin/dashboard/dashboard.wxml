@@ -1,4 +1,5 @@
 <view class="container">
+  <view class="glass-bg"></view>
   <view class="admin-title">数据面板</view>
   <view class="stat-grid">
     <view class="stat-card"><view class="stat-num">{{todayProcess}}</view><view class="stat-label">今日处理量</view></view>
