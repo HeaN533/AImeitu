@@ -10,6 +10,7 @@
     <view class="b-slider-item">
       <view class="b-slider-label">美白程度</view>
       <view class="b-slider-row">
+        <view class="b-slider-gap"></view>
         <slider min="0" max="100" value="{{bParams.whitening}}" data-field="whitening" bindchanging="onSliderChange" activeColor="#6c5ce7" backgroundColor="rgba(255,255,255,0.15)" block-size="22" />
         <text class="b-slider-val">{{bParams.whitening}}</text>
       </view>
@@ -17,6 +18,7 @@
     <view class="b-slider-item">
       <view class="b-slider-label">磨皮程度</view>
       <view class="b-slider-row">
+        <view class="b-slider-gap"></view>
         <slider min="0" max="100" value="{{bParams.smoothing}}" data-field="smoothing" bindchanging="onSliderChange" activeColor="#6c5ce7" backgroundColor="rgba(255,255,255,0.15)" block-size="22" />
         <text class="b-slider-val">{{bParams.smoothing}}</text>
       </view>
@@ -24,6 +26,7 @@
     <view class="b-slider-item">
       <view class="b-slider-label">瘦脸程度</view>
       <view class="b-slider-row">
+        <view class="b-slider-gap"></view>
         <slider min="0" max="100" value="{{bParams.thinface}}" data-field="thinface" bindchanging="onSliderChange" activeColor="#6c5ce7" backgroundColor="rgba(255,255,255,0.15)" block-size="22" />
         <text class="b-slider-val">{{bParams.thinface}}</text>
       </view>
@@ -31,6 +34,7 @@
     <view class="b-slider-item">
       <view class="b-slider-label">大眼程度</view>
       <view class="b-slider-row">
+        <view class="b-slider-gap"></view>
         <slider min="0" max="100" value="{{bParams.enlarge_eye}}" data-field="enlarge_eye" bindchanging="onSliderChange" activeColor="#6c5ce7" backgroundColor="rgba(255,255,255,0.15)" block-size="22" />
         <text class="b-slider-val">{{bParams.enlarge_eye}}</text>
       </view>
