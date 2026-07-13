@@ -1,37 +1,108 @@
 page {
-  background: #f5f5f7;
+  background: #1a1a2e;
   font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue',
     Helvetica, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  --primary: #07c160;
-  --primary-dark: #06ad56;
-  --primary-light: #e8fce8;
+  --primary: #6c5ce7;
+  --primary-dark: #5a4bd1;
+  --primary-light: rgba(108,92,231,0.15);
   --danger: #fa5151;
   --warn: #ff9500;
-  --text: #1a1a1a;
-  --text-secondary: #888;
-  --text-hint: #bbb;
-  --bg: #f5f5f7;
-  --card: #fff;
-  --divider: #f0f0f0;
-  --shadow: 0 4rpx 24rpx rgba(0,0,0,0.06);
-  --radius: 20rpx;
-  --radius-sm: 12rpx;
+  --text: #ffffff;
+  --text-secondary: rgba(255,255,255,0.7);
+  --text-hint: rgba(255,255,255,0.5);
+  --glass-bg: rgba(255,255,255,0.12);
+  --glass-border: rgba(255,255,255,0.2);
+  --glass-blur: blur(20rpx);
+  --shadow: 0 8rpx 32rpx rgba(0,0,0,0.15);
+  --radius: 32rpx;
+  --radius-sm: 24rpx;
+  --radius-btn: 16rpx;
 }
 
 .container {
   min-height: 100vh;
   padding: 24rpx;
   box-sizing: border-box;
+  position: relative;
 }
 
-/* card base */
-.card {
-  background: var(--card);
+/* 毛玻璃渐变背景 */
+.glass-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* 毛玻璃卡片 */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1rpx solid var(--glass-border);
   border-radius: var(--radius);
   padding: 28rpx;
   margin-bottom: 20rpx;
   box-shadow: var(--shadow);
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+
+/* 毛玻璃小卡片 */
+.glass-card-sm {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1rpx solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+  box-shadow: var(--shadow);
+  box-sizing: border-box;
+}
+
+/* 毛玻璃输入框 */
+.glass-input {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(10rpx);
+  -webkit-backdrop-filter: blur(10rpx);
+  border: 1rpx solid var(--glass-border);
+  border-radius: var(--radius-btn);
+  padding: 16rpx 24rpx;
+  font-size: 28rpx;
+  color: var(--text);
+  box-sizing: border-box;
+}
+
+/* 毛玻璃按钮 */
+.glass-btn {
+  background: rgba(108,92,231,0.3);
+  backdrop-filter: blur(10rpx);
+  -webkit-backdrop-filter: blur(10rpx);
+  border: 1rpx solid rgba(108,92,231,0.4);
+  border-radius: var(--radius-btn);
+  color: #fff;
+  font-size: 30rpx;
+  padding: 20rpx 40rpx;
+  text-align: center;
+}
+.glass-btn::after { border: none; }
+
+/* card base（兼容旧代码） */
+.card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1rpx solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+  box-shadow: var(--shadow);
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
 
 /* empty state */
@@ -46,7 +117,7 @@ page {
 .empty-state .text { font-size: 28rpx; color: var(--text-secondary); }
 
 /* divider */
-.divider { height: 1rpx; background: var(--divider); margin: 0 -28rpx; }
+.divider { height: 1rpx; background: rgba(255,255,255,0.1); margin: 0 -28rpx; }
 
 /* global reset */
 view, text, image, button, input, scroll-view {
