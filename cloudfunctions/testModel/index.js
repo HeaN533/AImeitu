@@ -22,6 +22,7 @@ exports.main = async (event, context) => {
   const modelRes = await db.collection('model_configs').doc(modelId).get();
   const model = modelRes.data;
   if (!model) return { ok: false, error: '模型不存在' };
+  const apiUrl = (model.api_url || '').replace(/^(POST|GET|PUT|DELETE|PATCH)\s+/i, '').trim();
 
   const start = Date.now();
   try {
@@ -34,14 +35,14 @@ exports.main = async (event, context) => {
       form.append('image_base64', TEST_IMAGE_BASE64);
       Object.keys(model.config || {}).forEach(k => form.append(k, model.config[k]));
 
-      response = await axios.post(model.api_url, form, {
+      response = await axios.post(apiUrl, form, {
         headers: form.getHeaders(),
         timeout: 25000,
         validateStatus: () => true,
       });
     } else {
       // Bearer Token 类：用 image_base64 传图
-      response = await axios.post(model.api_url, {
+      response = await axios.post(apiUrl, {
         image_base64: TEST_IMAGE_BASE64,
         task_type: 'test',
         ...(model.config || {}),

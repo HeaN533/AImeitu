@@ -19,6 +19,7 @@ async function getActiveModel(category) {
 //    直接返回二进制图片。
 async function callAIModel(model, imageUrl, processType, subType, params) {
   const config = model.config || {};
+  const apiUrl = (model.api_url || '').replace(/^(POST|GET|PUT|DELETE|PATCH)\s+/i, '').trim();
 
   // ---- Face++ 类：双密钥 form-data 鉴权 ----
   if (model.api_secret) {
@@ -33,7 +34,7 @@ async function callAIModel(model, imageUrl, processType, subType, params) {
 
     let res;
     try {
-      res = await axios.post(model.api_url, form, {
+      res = await axios.post(apiUrl, form, {
         headers: form.getHeaders(),
         timeout: 30000,
       });
