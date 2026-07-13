@@ -10,9 +10,9 @@
       data-key="{{item.key}}" bindtap="selectSubType">
       <view class="sub-icon">
         <text wx:if="{{activeCategory === 'beautify'}}">✨</text>
-        <text wx:elif="{{activeCategory === 'color'}}">🎨</text>
-        <text wx:elif="{{activeCategory === 'style'}}">🖼️</text>
-        <text wx:else>🤖</text>
+        <text wx:elif="{{activeCategory === 'filter'}}">📸</text>
+        <text wx:elif="{{activeCategory === 'style'}}">🎭</text>
+        <text wx:else>🎨</text>
       </view>
       <view class="sub-name">{{item.label}}</view>
       <view class="sub-price">{{priceMap[activeCategory + '_' + item.key] || defaultPrices[activeCategory]}} 代币</view>
