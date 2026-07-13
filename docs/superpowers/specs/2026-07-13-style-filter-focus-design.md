@@ -78,6 +78,69 @@
 - 人像美化：底部小卡片，单行
 - 一键美化：删除
 
+## UI 风格：毛玻璃（Glassmorphism）
+
+整体前端采用毛玻璃风格，UI 美观大气。
+
+### 设计要素
+
+- **背景**：页面背景使用渐变色（如深紫→深蓝或暖色渐变），为毛玻璃效果提供色彩基底
+- **卡片**：所有卡片使用 `backdrop-filter: blur(20rpx)` + `background: rgba(255,255,255,0.15)` + 半透明边框 `border: 1rpx solid rgba(255,255,255,0.25)`
+- **圆角**：大卡片 `border-radius: 32rpx`，小卡片 `border-radius: 24rpx`，按钮 `border-radius: 16rpx`
+- **阴影**：卡片加 `box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.1)` 提升层次感
+- **文字**：主文字白色或近白，次要文字 `rgba(255,255,255,0.7)`
+- **图标**：emoji 图标放大，配半透明圆形背景
+
+### 应用范围
+
+| 页面 | 毛玻璃改造 |
+|---|---|
+| **首页（index）** | 渐变背景 + 大卡片毛玻璃 + 小卡片毛玻璃 |
+| **处理页（process）** | 步骤卡片毛玻璃，上传区域毛玻璃 |
+| **预览页（preview）** | 信息栏 + 按钮毛玻璃 |
+| **历史页（history）** | 列表项毛玻璃 |
+| **个人中心（profile）** | 用户卡片 + 菜单卡片 + 流水卡片毛玻璃 |
+| **充值页（recharge）** | 套餐卡片毛玻璃 |
+| **管理后台** | 卡片毛玻璃（统一风格） |
+| **effect-picker 组件** | 分类标签 + 子选项卡片毛玻璃 |
+| **image-uploader 组件** | 上传区域毛玻璃 |
+
+### 全局样式
+
+在 `app.wxss` 中定义毛玻璃通用类，各页面引用：
+- `.glass-card`：毛玻璃卡片基础样式
+- `.glass-bg`：渐变背景
+- `.glass-input`：毛玻璃输入框
+- `.glass-btn`：毛玻璃按钮
+
+## Git 分支管理策略
+
+使用 git 分支管理，确保可回滚可修复。
+
+### 分支规划
+
+```
+main / master              ← 稳定版本，只合并经过测试的完整功能
+feature/ai-photo-beautify  ← 当前开发分支（已有 23 commit）
+feature/style-filter-redesign ← 本次"风格+滤镜为主打"的改造分支
+```
+
+### 工作流程
+
+1. 从 `feature/ai-photo-beautify` 创建 `feature/style-filter-redesign` 分支
+2. 每个任务完成后 commit，保持小步快跑
+3. 任务全部完成后合并回 `feature/ai-photo-beautify`
+4. 如果出现问题，`git revert <commit>` 回滚单个改动
+5. 如果整个方向有问题，`git checkout feature/ai-photo-beautify` 回到改造前状态
+
+### Commit 规范
+
+- `feat:` 新功能（如新分类、新 UI）
+- `fix:` 修复 bug
+- `refactor:` 重构
+- `style:` UI 样式调整
+- `docs:` 文档
+
 ## 改动范围
 
 ### 前端
@@ -87,8 +150,17 @@
 | `miniprogram/utils/constants.js` | CATEGORIES 去掉 auto；CATEGORY_LABELS 改 `color` → `filter` 且 label 改"滤镜转换"；SUB_TYPES 按上述新定义替换；DEFAULT_PRICES key 改 `color` → `filter` |
 | `miniprogram/pages/index/index.js` | CATEGORY_ICONS 和 CATEGORY_DESC 适配新分类；categories 数据适配 |
 | `miniprogram/pages/index/index.wxml` | 大卡片+小卡片布局：风格/滤镜大卡片并排，人像美化小卡片底部 |
-| `miniprogram/pages/index/index.wxss` | 新布局样式：大卡片、小卡片、并排两列 |
+| `miniprogram/pages/index/index.wxss` | 毛玻璃风格大卡片+小卡片样式 |
+| `miniprogram/app.wxss` | 新增毛玻璃通用类：`.glass-card` `.glass-bg` `.glass-input` `.glass-btn` |
 | `miniprogram/components/effect-picker/effect-picker.wxml` | 图标适配新分类 key（color → filter） |
+| `miniprogram/components/effect-picker/effect-picker.wxss` | 毛玻璃风格标签和子选项卡片 |
+| `miniprogram/components/image-uploader/image-uploader.wxss` | 上传区域毛玻璃 |
+| `miniprogram/pages/process/process.wxss` | 步骤卡片毛玻璃 |
+| `miniprogram/pages/preview/preview.wxss` | 信息栏+按钮毛玻璃 |
+| `miniprogram/pages/history/history.wxss` | 列表项毛玻璃 |
+| `miniprogram/pages/profile/profile.wxss` | 用户卡片+菜单卡片+流水卡片毛玻璃 |
+| `miniprogram/pages/recharge/recharge.wxss` | 套餐卡片毛玻璃 |
+| `miniprogram/pages/admin/*/*.wxss` | 管理后台卡片毛玻璃（统一风格） |
 | `miniprogram/pages/admin/models/models.js` | loadModels 过滤 auto 已做，确认 filter key 一致 |
 
 ### 云函数
