@@ -14,7 +14,7 @@ Component({
       wx.chooseMedia({
         count: 1,
         mediaType: ['image'],
-        sizeType: ['original'],
+        sizeType: ['compressed'],
         sourceType: ['album', 'camera'],
         success: (res) => {
           const file = res.tempFiles[0];
