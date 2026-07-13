@@ -52,19 +52,20 @@
 }
 .b-slider-item {
   margin-bottom: 32rpx;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
 }
 .b-slider-label {
-  width: 100%;
   font-size: 26rpx;
   color: var(--text-secondary);
   margin-bottom: 8rpx;
 }
-.b-slider-item slider {
+.b-slider-row {
+  display: flex;
+  align-items: center;
+}
+.b-slider-row slider {
   flex: 1;
-  margin: 0;
+  width: 0;
+  margin-right: 16rpx;
 }
 .b-slider-val {
   width: 80rpx;
@@ -72,7 +73,6 @@
   font-size: 28rpx;
   font-weight: 600;
   color: var(--text);
-  margin-left: 16rpx;
 }
 .b-filter-row {
   display: flex;

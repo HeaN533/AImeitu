@@ -9,23 +9,31 @@
   <view wx:if="{{isBeautify}}" class="beautify-panel">
     <view class="b-slider-item">
       <view class="b-slider-label">美白程度</view>
-      <slider min="0" max="100" value="{{bParams.whitening}}" data-field="whitening" bindchange="onSliderChange" activeColor="#6c5ce7" block-size="20" />
-      <text class="b-slider-val">{{bParams.whitening}}</text>
+      <view class="b-slider-row">
+        <slider min="0" max="100" value="{{bParams.whitening}}" data-field="whitening" bindchanging="onSliderChange" activeColor="#6c5ce7" backgroundColor="rgba(255,255,255,0.15)" block-size="22" />
+        <text class="b-slider-val">{{bParams.whitening}}</text>
+      </view>
     </view>
     <view class="b-slider-item">
       <view class="b-slider-label">磨皮程度</view>
-      <slider min="0" max="100" value="{{bParams.smoothing}}" data-field="smoothing" bindchange="onSliderChange" activeColor="#6c5ce7" block-size="20" />
-      <text class="b-slider-val">{{bParams.smoothing}}</text>
+      <view class="b-slider-row">
+        <slider min="0" max="100" value="{{bParams.smoothing}}" data-field="smoothing" bindchanging="onSliderChange" activeColor="#6c5ce7" backgroundColor="rgba(255,255,255,0.15)" block-size="22" />
+        <text class="b-slider-val">{{bParams.smoothing}}</text>
+      </view>
     </view>
     <view class="b-slider-item">
       <view class="b-slider-label">瘦脸程度</view>
-      <slider min="0" max="100" value="{{bParams.thinface}}" data-field="thinface" bindchange="onSliderChange" activeColor="#6c5ce7" block-size="20" />
-      <text class="b-slider-val">{{bParams.thinface}}</text>
+      <view class="b-slider-row">
+        <slider min="0" max="100" value="{{bParams.thinface}}" data-field="thinface" bindchanging="onSliderChange" activeColor="#6c5ce7" backgroundColor="rgba(255,255,255,0.15)" block-size="22" />
+        <text class="b-slider-val">{{bParams.thinface}}</text>
+      </view>
     </view>
     <view class="b-slider-item">
       <view class="b-slider-label">大眼程度</view>
-      <slider min="0" max="100" value="{{bParams.enlarge_eye}}" data-field="enlarge_eye" bindchange="onSliderChange" activeColor="#6c5ce7" block-size="20" />
-      <text class="b-slider-val">{{bParams.enlarge_eye}}</text>
+      <view class="b-slider-row">
+        <slider min="0" max="100" value="{{bParams.enlarge_eye}}" data-field="enlarge_eye" bindchanging="onSliderChange" activeColor="#6c5ce7" backgroundColor="rgba(255,255,255,0.15)" block-size="22" />
+        <text class="b-slider-val">{{bParams.enlarge_eye}}</text>
+      </view>
     </view>
     <view class="b-filter-row">
       <text class="b-filter-label">滤镜</text>
