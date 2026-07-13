@@ -11,6 +11,7 @@ Component({
     // 人像美化 slider 参数
     bParams: { ...BEAUTY_DEFAULTS },
     bFilterIdx: 0,
+    showFilterList: false,
     filterOptions: FILTER_OPTIONS,
     isBeautify: true,
   },
@@ -81,8 +82,12 @@ Component({
       this.setData({ ['bParams.' + field]: value });
     },
 
-    onFilterChange(e) {
-      this.setData({ bFilterIdx: parseInt(e.detail.value) });
+    toggleFilterList() {
+      this.setData({ showFilterList: !this.data.showFilterList });
+    },
+
+    selectFilter(e) {
+      this.setData({ bFilterIdx: parseInt(e.currentTarget.dataset.idx), showFilterList: false });
     },
 
     confirmBeautify() {

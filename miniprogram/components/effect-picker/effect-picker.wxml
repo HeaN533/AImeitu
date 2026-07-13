@@ -37,9 +37,14 @@
     </view>
     <view class="b-filter-row">
       <text class="b-filter-label">滤镜</text>
-      <picker mode="selector" range="{{filterOptions}}" range-key="label" value="{{bFilterIdx}}" bindchange="onFilterChange">
-        <view class="b-filter-picker">{{filterOptions[bFilterIdx].label}} ▼</view>
-      </picker>
+      <view class="b-filter-wrap">
+        <view class="b-filter-val" bindtap="toggleFilterList">{{filterOptions[bFilterIdx].label}} ▼</view>
+        <view class="b-filter-drop" wx:if="{{showFilterList}}">
+          <view class="b-filter-opt {{bFilterIdx === idx ? 'on' : ''}}"
+            wx:for="{{filterOptions}}" wx:key="key" wx:for-index="idx"
+            data-idx="{{idx}}" bindtap="selectFilter">{{item.label}}</view>
+        </view>
+      </view>
     </view>
     <button class="b-confirm-btn" bindtap="confirmBeautify">
       使用此参数 · {{priceMap['beautify_beautify'] || defaultPrices['beautify']}} 代币
