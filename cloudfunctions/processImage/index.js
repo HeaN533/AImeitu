@@ -26,17 +26,25 @@ async function callAIModel(model, imageUrl, processType, subType, params) {
     form.append('api_key', model.api_key);
     form.append('api_secret', model.api_secret);
     form.append('image_url', imageUrl);
-    // model.config 作为基础参数
     Object.keys(config).forEach(k => form.append(k, config[k]));
-    // 用户前端 params 覆盖/补充（如 whitening/smoothing/thinface/enlarge_eye/filter_type）
     if (params) {
       Object.keys(params).forEach(k => form.append(k, params[k]));
     }
 
-    const res = await axios.post(model.api_url, form, {
-      headers: form.getHeaders(),
-      timeout: 30000,
-    });
+    let res;
+    try {
+      res = await axios.post(model.api_url, form, {
+        headers: form.getHeaders(),
+        timeout: 30000,
+      });
+    } catch (e) {
+      let detail = e.message;
+      if (e.response && e.response.data) {
+        try { detail = JSON.stringify(e.response.data); } catch (_) { detail = String(e.response.data); }
+      }
+      throw new Error('API 请求失败 HTTP ' + (e.response ? e.response.status : '') + ': ' + detail);
+    }
+
     const json = res.data;
     if (!json || !json.result) {
       throw new Error('AI 处理失败：' + (json && json.error_message ? json.error_message : JSON.stringify(json)));
@@ -51,11 +59,20 @@ async function callAIModel(model, imageUrl, processType, subType, params) {
     ...config,
     ...(params || {}),
   };
-  const res = await axios.post(model.api_url, payload, {
-    headers: { 'Authorization': 'Bearer ' + model.api_key, 'Content-Type': 'application/json' },
-    timeout: 30000,
-    responseType: 'arraybuffer',
-  });
+  let res;
+  try {
+    res = await axios.post(model.api_url, payload, {
+      headers: { 'Authorization': 'Bearer ' + model.api_key, 'Content-Type': 'application/json' },
+      timeout: 30000,
+      responseType: 'arraybuffer',
+    });
+  } catch (e) {
+    let detail = e.message;
+    if (e.response && e.response.data) {
+      try { detail = Buffer.from(e.response.data).toString('utf8'); } catch (_) { detail = '[binary]'; }
+    }
+    throw new Error('API 请求失败 HTTP ' + (e.response ? e.response.status : '') + ': ' + detail);
+  }
   return Buffer.from(res.data);
 }
 
