@@ -1,5 +1,7 @@
 .pv-container {
   display: flex; flex-direction: column; align-items: center;
+  position: relative;
+  z-index: 1;
 }
 .pv-img-wrap {
   width: 100%;
@@ -9,7 +11,7 @@
 .pv-img {
   width: 100%; height: 640rpx;
   border-radius: var(--radius);
-  background: #f0f0f0;
+  background: var(--glass-bg);
 }
 .pv-watermark-stamp {
   position: absolute; right: 16rpx; bottom: 16rpx;
@@ -21,11 +23,14 @@
   letter-spacing: 2rpx;
 }
 .pv-info {
-  background: #fff8e0;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1rpx solid var(--glass-border);
   border-radius: var(--radius-sm);
   padding: 20rpx 24rpx;
   font-size: 26rpx;
-  color: #8a6d14;
+  color: var(--text-secondary);
   width: 100%;
   box-sizing: border-box;
   margin-bottom: 32rpx;
@@ -33,26 +38,32 @@
 .pv-info-icon { margin-right: 8rpx; }
 .pv-primary {
   width: 100%;
-  background: linear-gradient(135deg, #07c160, #05d68c);
+  background: rgba(108,92,231,0.3);
+  backdrop-filter: blur(10rpx);
+  -webkit-backdrop-filter: blur(10rpx);
+  border: 1rpx solid rgba(108,92,231,0.4);
   color: #fff;
   border-radius: 44rpx;
   font-size: 32rpx;
   font-weight: 600;
   padding: 24rpx;
-  border: none;
   margin-bottom: 16rpx;
-  box-shadow: 0 8rpx 24rpx rgba(7,193,96,0.3);
+  box-shadow: 0 8rpx 24rpx rgba(108,92,231,0.3);
 }
+.pv-primary::after { border: none; }
 .pv-ghost {
   width: 100%;
-  background: transparent;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   color: var(--text-secondary);
-  border: 2rpx solid #ddd;
+  border: 1rpx solid var(--glass-border);
   border-radius: 44rpx;
   font-size: 28rpx;
   padding: 20rpx;
   margin-bottom: 12rpx;
 }
+.pv-ghost::after { border: none; }
 .pv-link {
   background: none;
   color: var(--text-hint);
@@ -60,3 +71,4 @@
   border: none;
   padding: 20rpx;
 }
+.pv-link::after { border: none; }
